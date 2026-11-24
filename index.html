@@ -4312,7 +4312,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.71 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.72 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -9938,7 +9938,7 @@ function preOuvre(){
   if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.71'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.72'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -12649,6 +12649,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'35.72', items:["Le Pré de Caramel : des papiers peuvent traîner dans le jardin de la maison. Une fois trouvés, Emile vient les contrôler.","Le Pré de Caramel : musique de fond douce, « L'as-tu vu » le jour et « Plaisir d'amour » le soir (bouton SON).","Le Pré de Caramel : les trouvailles apparaissent au hasard dans tout le pré. Emile vient toutes les 4 minutes, et le soir a sa propre phrase d'accueil.","Correctif : dans Le Pré de Caramel, Emile restait bloqué en arrivant et l'ordre des produits pouvait se décaler."] },
   { v:'35.71', items:["Le Pré de Caramel : quand on quitte puis rouvre le jeu, Florence reprend devant la maison.","Nouvel encodage : une carte « Réserve Vinted » ouvre directement Le Pré de Caramel.","Réserve Vinted : le bouton « Jouer » est moins haut et porte une icône de manette d'arcade."] },
   { v:'35.70', items:["Le Pré de Caramel : la console commence sous le voile clair que l'iPhone affiche en haut de l'écran. Le bouton d'accueil affiche toujours « Jouer »."] },
   { v:'35.69', items:["Le Pré de Caramel : un appui long ou répété sur les boutons ne sélectionne plus de texte et n'agrandit plus l'écran.","Le Pré de Caramel : la console occupe tout l'écran du téléphone, avec un écran de jeu et des boutons plus grands.","Le Pré de Caramel : la fiche produit tient toujours dans l'écran, même avec un nom ou un matériau très long."] },
