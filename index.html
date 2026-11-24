@@ -1774,7 +1774,7 @@ button.btn-primary.icon-btn:hover{background:#1B3273;}
 .rsv-info{grid-column:1 / -1;grid-row:3;margin-top:2px;gap:0 14px;}
 .rsv-titre{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 6px;}
 .rsv-titre .btn{width:auto;margin:0;flex:none;}
-.pre-cadre{position:fixed;inset:0;z-index:100000;background:#23408F;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);}
+.pre-cadre{position:fixed;inset:0;z-index:100000;background:#23408F;padding:calc(env(safe-area-inset-top,0px) + min(36px,env(safe-area-inset-top,0px))) 0 env(safe-area-inset-bottom,0px);}
 .pre-cadre,.pre-cadre *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;}
 @media (min-width:520px){.pre-cadre{background:#DCE2EE;}.pre-attente{color:#000;}}
 .pre-cadre iframe{display:block;width:100%;height:100%;border:0;}
@@ -4305,7 +4305,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.69 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.70 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -9931,7 +9931,7 @@ function preOuvre(){
   if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.69'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.70'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -12641,6 +12641,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'35.70', items:["Le Pré de Caramel : la console commence sous le voile clair que l'iPhone affiche en haut de l'écran. Le bouton d'accueil affiche toujours « Jouer »."] },
   { v:'35.69', items:["Le Pré de Caramel : un appui long ou répété sur les boutons ne sélectionne plus de texte et n'agrandit plus l'écran.","Le Pré de Caramel : la console occupe tout l'écran du téléphone, avec un écran de jeu et des boutons plus grands.","Le Pré de Caramel : la fiche produit tient toujours dans l'écran, même avec un nom ou un matériau très long."] },
   { v:'35.68', items:["Réserve Vinted : bouton « Jouer », qui ouvre Le Pré de Caramel. Chaque produit trié dans le jeu met à jour son canal de vente et sa réserve. Les choix faits sans réseau sont gardés sur l'appareil et envoyés au retour de la connexion.","Réserve Vinted : nouveau canal « Aucun ». Le produit garde son stock, mais compte 0 pièce pour Vinted et 0 pour le site."] },
   { v:'35.67', items:["Factures PDF refaites selon la charte : police Jost, nom FABERHAUS avec cartouche ELEMENTS, encadré vert « Réglée » et total encadré, conditions (rétractation, garantie) et pied de page avec numéro BCE. Les factures déjà envoyées gardent leur ancien PDF tant qu'elles ne sont pas régénérées."] },
