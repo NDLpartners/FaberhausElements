@@ -1773,7 +1773,8 @@ button.btn-primary.icon-btn:hover{background:#1B3273;}
 .rsv-act{grid-column:2;grid-row:1 / 3;}
 .rsv-info{grid-column:1 / -1;grid-row:3;margin-top:2px;gap:0 14px;}
 .rsv-titre{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 6px;}
-.rsv-titre .btn{width:auto;margin:0;flex:none;}
+.rsv-titre .btn{width:auto;margin:0;flex:none;min-height:36px;height:36px;padding:0 13px;display:inline-flex;align-items:center;gap:7px;}
+.rsv-titre .btn svg{width:18px;height:18px;flex:none;}
 .pre-cadre{position:fixed;inset:0;z-index:100000;background:#23408F;padding:calc(env(safe-area-inset-top,0px) + min(36px,env(safe-area-inset-top,0px))) 0 env(safe-area-inset-bottom,0px);}
 .pre-cadre,.pre-cadre *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;}
 @media (min-width:520px){.pre-cadre{background:#DCE2EE;}.pre-attente{color:#000;}}
@@ -3776,6 +3777,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
         <svg class="ne-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
 
+      <button type="button" class="home-card home-card-full ne-choice" id="ne-choice-reserve">
+        <div class="home-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258l-.017-.151A4 4 0 0 0 17.32 5Z"/></svg></div>
+        <div class="home-card-text"><div class="label">Réserve Vinted</div><div class="desc">Trier le stock en jouant</div></div>
+        <svg class="ne-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
       <button type="button" class="home-card home-card-full ne-choice" id="ne-choice-importer">
         <div class="home-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
         <div class="home-card-text"><div class="label">Importer</div><div class="desc">Depuis un fichier Excel</div></div>
@@ -3832,7 +3839,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
     <!-- ---------- MES REPÉRAGES ---------- -->
     <section id="view-reservations" class="hidden">
-      <div class="rsv-titre"><h1 style="font-size:22px;margin:0;">Réserve Vinted</h1><button type="button" class="btn btn-primary" id="pre-jouer">Jouer</button></div>
+      <div class="rsv-titre"><h1 style="font-size:22px;margin:0;">Réserve Vinted</h1><button type="button" class="btn btn-primary" id="pre-jouer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 17a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2Z"/><path d="M6 15v-2"/><path d="M12 15V9"/><circle cx="12" cy="6" r="3"/></svg>Jouer</button></div>
       <p class="rsv-help">Les pièces <b>réservées</b> sont mises de côté pour Vinted. Choisis pour chaque article où il est vendu : <b>Vinted</b>, <b>Site</b> ou <b>Les deux</b>. Le <b>stock pour le site</b> est le stock restant moins cette réserve (0 si Vinted seul ; sans réserve si Site seul). Une vente Vinted encodée retire ses pièces de la réserve.</p>
       <div class="rsv-total" id="rsv-total"></div>
       <input type="text" id="rsv-search" placeholder="Rechercher par code ou nom…" autocomplete="off">
@@ -4305,7 +4312,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.70 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.71 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -9931,7 +9938,7 @@ function preOuvre(){
   if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.70'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.71'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -9964,6 +9971,7 @@ addEventListener('message', async e => {
   } else if(d.pre === 'quitter'){ preFerme(); }
 });
 $('pre-jouer').addEventListener('click', preOuvre);
+$('ne-choice-reserve').addEventListener('click', preOuvre);
 
 // Mini-courbes des cartes : 30 derniers jours, chaque point = valeur sur 7 jours glissants
 // (le dernier point correspond donc exactement au chiffre affiché sur la carte).
@@ -12641,6 +12649,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'35.71', items:["Le Pré de Caramel : quand on quitte puis rouvre le jeu, Florence reprend devant la maison.","Nouvel encodage : une carte « Réserve Vinted » ouvre directement Le Pré de Caramel.","Réserve Vinted : le bouton « Jouer » est moins haut et porte une icône de manette d'arcade."] },
   { v:'35.70', items:["Le Pré de Caramel : la console commence sous le voile clair que l'iPhone affiche en haut de l'écran. Le bouton d'accueil affiche toujours « Jouer »."] },
   { v:'35.69', items:["Le Pré de Caramel : un appui long ou répété sur les boutons ne sélectionne plus de texte et n'agrandit plus l'écran.","Le Pré de Caramel : la console occupe tout l'écran du téléphone, avec un écran de jeu et des boutons plus grands.","Le Pré de Caramel : la fiche produit tient toujours dans l'écran, même avec un nom ou un matériau très long."] },
   { v:'35.68', items:["Réserve Vinted : bouton « Jouer », qui ouvre Le Pré de Caramel. Chaque produit trié dans le jeu met à jour son canal de vente et sa réserve. Les choix faits sans réseau sont gardés sur l'appareil et envoyés au retour de la connexion.","Réserve Vinted : nouveau canal « Aucun ». Le produit garde son stock, mais compte 0 pièce pour Vinted et 0 pour le site."] },
