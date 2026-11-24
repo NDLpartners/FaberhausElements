@@ -12,23 +12,22 @@ body{margin:0}[hidden]{display:none!important}
 :root{
   --desk:#DCE2EE; --shell:#23408F; --shell-hi:#3A5AB0; --shell-lo:#182D68; --bezel:#24262E;
   --paper:#FBF4DF; --ink:#2A2233; --soft:#E4D8B8; --carrot:#E5772E; --leaf:#4E9A46; --key:#17181D; --cream:#F4F1E6; --led:#FF4B3E;
-  --pix:'VT323','Courier New',monospace; --ui:'Jost',system-ui,sans-serif; --u:1.7px;
+  --pix:'VT323','Courier New',monospace; --ui:'Jost',system-ui,sans-serif; --u:1.7px; --c:clamp(.86px,min(.31vw,calc((100vh - 109vw - 144px)/150)),1.3px);
   color-scheme:light;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;touch-action:none}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{height:100%}
-body{background:var(--desk);color:var(--ink);font-family:var(--ui);overflow:hidden;padding-block:0;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+body{background:var(--shell);color:var(--ink);font-family:var(--ui);overflow:hidden;padding-block:0;
   display:flex;justify-content:center;align-items:center;overscroll-behavior:none}
-button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
 button:focus-visible{outline:3px solid #FFD54A;outline-offset:2px}
-.shell{width:100%;max-width:410px;height:100%;max-height:800px;background:var(--shell);color:#fff;border-radius:20px 20px 64px 20px;padding:9px 10px 10px;display:flex;flex-direction:column;gap:8px;
-  box-shadow:inset 0 3px 0 var(--shell-hi),inset 0 -6px 0 var(--shell-lo),0 14px 30px rgba(24,45,104,.35)}
-.bezel{background:var(--bezel);border-radius:12px 12px 34px 12px;padding:4px 10px 7px;display:flex;flex-direction:column;gap:4px;flex:1;min-height:0}
+.shell{width:100%;height:100%;background:var(--shell);color:#fff;padding:3px 6px 6px;display:flex;flex-direction:column;gap:6px}
+.bezel{background:var(--bezel);border-radius:12px 12px 34px 12px;padding:0 6px 8px;display:flex;flex-direction:column;gap:5px;flex:0 1 auto;min-height:0}
 .bezel-top{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#C9CBD3}
 .bezel-top button{min-height:30px;padding:0 4px}
 .led{display:inline-flex;align-items:center;gap:7px}.led i{width:9px;height:9px;border-radius:50%;background:var(--led);box-shadow:0 0 8px var(--led)}
-.lcd{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lcd{flex:0 1 auto;width:100%;aspect-ratio:176/192;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .view{position:relative;width:300px;height:327px;background:#8FBF55;overflow:hidden;border-radius:3px;font-family:var(--pix);color:var(--ink)}
 .view canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.fichep canvas,.pxA{image-rendering:pixelated}
 .say{position:absolute;left:calc(6*var(--u));right:calc(6*var(--u));bottom:calc(6*var(--u));background:var(--paper);border:calc(1.5*var(--u)) solid var(--ink);padding:calc(3*var(--u)) calc(5*var(--u));font-size:calc(11.5*var(--u));line-height:1.02;text-align:center}
@@ -70,25 +69,25 @@ button:focus-visible{outline:3px solid #FFD54A;outline-offset:2px}
 @media (prefers-reduced-motion:no-preference){.pret .gl.A,.aide .go .gl{animation:bat .8s ease-in-out infinite}.quest.rebond{animation:pop .22s}}
 @keyframes bat{50%{transform:scale(1.22)}}@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}}
 .fichep{position:absolute;inset:0;background:rgba(42,34,51,.72);display:flex;align-items:center;justify-content:center}
-.fichep article{width:84%;background:#FFF6DC;border:calc(2*var(--u)) solid #7B4A2C;box-shadow:0 0 0 calc(1.5*var(--u)) var(--ink),inset 0 0 0 calc(1.2*var(--u)) #E9C98A;padding:calc(7*var(--u)) calc(9*var(--u));display:flex;flex-direction:column;gap:calc(3*var(--u));font-size:calc(12*var(--u));line-height:1}
-.fichep header{display:flex;gap:calc(6*var(--u));align-items:center;border-bottom:calc(1.2*var(--u)) dashed #C9A063;padding-bottom:calc(4*var(--u))}.fichep header canvas{position:static;width:calc(26*var(--u));height:calc(26*var(--u));flex:none}.fichep h2{margin:0;font-weight:400;font-size:calc(14*var(--u));line-height:.95;min-width:0}.fichep h2 small{display:block;font-size:calc(11*var(--u));color:#8A5736}
-.fichep dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:calc(3.2*var(--u)) calc(8*var(--u))}.fichep dt{color:#8A5736}.fichep dd{margin:0;text-align:right;min-width:0}.fichep dd.prix{font-size:calc(15*var(--u));line-height:.8}
+.fichep article{width:92%;max-height:96%;overflow:hidden;background:#FFF6DC;border:calc(2*var(--u)) solid #7B4A2C;box-shadow:0 0 0 calc(1.5*var(--u)) var(--ink),inset 0 0 0 calc(1.2*var(--u)) #E9C98A;padding:calc(7*var(--u)) calc(9*var(--u));display:flex;flex-direction:column;gap:calc(3*var(--u));font-size:calc(12*var(--u));line-height:1}
+.fichep header{display:flex;gap:calc(6*var(--u));align-items:center;border-bottom:calc(1.2*var(--u)) dashed #C9A063;padding-bottom:calc(4*var(--u))}.fichep header canvas{position:static;width:calc(26*var(--u));height:calc(26*var(--u));flex:none}.fichep h2{margin:0;font-weight:400;font-size:calc(12*var(--u));line-height:.95;min-width:0;overflow-wrap:anywhere}.fichep h2 span,.fichep dd span{display:block;overflow:hidden;line-height:1em;max-height:2em}.fichep h2 span{max-height:4em}.fichep h2 small{display:block;font-size:calc(11*var(--u));color:#8A5736}
+.fichep dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:calc(3.2*var(--u)) calc(8*var(--u))}.fichep dt{color:#8A5736}.fichep dd{margin:0;text-align:right;min-width:0;overflow-wrap:anywhere}.fichep dd.prix{font-size:calc(15*var(--u));line-height:.8}
 .fichep p{margin:0;display:flex;justify-content:center;gap:calc(3*var(--u));align-items:center}
 @media (prefers-reduced-motion:no-preference){.fichep article{animation:carte .26s ease-out}}@keyframes carte{0%{transform:scaleX(.05)}}
 .mark{display:flex;justify-content:center;align-items:baseline;gap:8px;line-height:1;font-family:var(--ui);font-style:italic;font-weight:700;font-size:17px;letter-spacing:.02em;color:#E9EAF0;transform:translateX(-2px)}
 .mark b{font-family:'Baloo 2','Jost',system-ui,sans-serif;font-style:normal;font-weight:800;font-size:18px;letter-spacing:.07em;line-height:.8;display:inline-flex}
 .mark i{font-style:normal}.mark i:nth-child(1){color:#FF5A4F}.mark i:nth-child(2){color:#FFC53D}.mark i:nth-child(3){color:#6FD34E}.mark i:nth-child(4){color:#58A8FF}.mark i:nth-child(5){color:#C08BFF}
-.pad-row{display:flex;justify-content:space-between;align-items:center;padding:0 6px;flex:none}
-.dpad{position:relative;width:138px;height:138px;touch-action:none;flex:none}
-.dpad button{position:absolute;width:46px;height:46px;background:var(--key);color:#A9ACB8;font-size:14px;pointer-events:none}
-.dpad i{position:absolute;left:46px;top:46px;width:46px;height:46px;background:var(--key)}
-.dpad .u{left:46px;top:0;border-radius:9px 9px 0 0;box-shadow:inset 0 2px 0 #3A3C46}.dpad .d{left:46px;bottom:0;border-radius:0 0 9px 9px;box-shadow:inset 0 -3px 0 #000}
-.dpad .l{left:0;top:46px;border-radius:9px 0 0 9px;box-shadow:inset 0 2px 0 #3A3C46}.dpad .r{right:0;top:46px;border-radius:0 9px 9px 0;box-shadow:inset 0 2px 0 #3A3C46}
+.pad-row{display:flex;justify-content:space-between;align-items:center;padding:0 8px;flex:1 0 auto}
+.dpad{position:relative;width:calc(138*var(--c));height:calc(138*var(--c));touch-action:none;flex:none}
+.dpad button{position:absolute;width:calc(46*var(--c));height:calc(46*var(--c));background:var(--key);color:#A9ACB8;font-size:calc(14*var(--c));pointer-events:none}
+.dpad i{position:absolute;left:calc(46*var(--c));top:calc(46*var(--c));width:calc(46*var(--c));height:calc(46*var(--c));background:var(--key)}
+.dpad .u{left:calc(46*var(--c));top:0;border-radius:9px 9px 0 0;box-shadow:inset 0 2px 0 #3A3C46}.dpad .d{left:calc(46*var(--c));bottom:0;border-radius:0 0 9px 9px;box-shadow:inset 0 -3px 0 #000}
+.dpad .l{left:0;top:calc(46*var(--c));border-radius:9px 0 0 9px;box-shadow:inset 0 2px 0 #3A3C46}.dpad .r{right:0;top:calc(46*var(--c));border-radius:0 9px 9px 0;box-shadow:inset 0 2px 0 #3A3C46}
 .dpad .on{background:#33353F;color:#fff}
-.abxy{position:relative;width:146px;height:146px;flex:none}
-.abxy button{position:absolute;width:54px;height:54px;border-radius:50%;background:#1D1E24;font-size:25px;font-weight:500;line-height:1;box-shadow:inset 0 3px 0 #41434E,inset 0 -3px 0 #0B0B0E,0 4px 0 var(--shell-lo);touch-action:none}
+.abxy{position:relative;width:calc(146*var(--c));height:calc(146*var(--c));flex:none}
+.abxy button{position:absolute;width:calc(54*var(--c));height:calc(54*var(--c));border-radius:50%;background:#1D1E24;font-size:calc(25*var(--c));font-weight:500;line-height:1;box-shadow:inset 0 3px 0 #41434E,inset 0 -3px 0 #0B0B0E,0 4px 0 var(--shell-lo);touch-action:none}
 .abxy button:active{transform:translateY(3px);box-shadow:inset 0 2px 0 #41434E,0 1px 0 var(--shell-lo)}
-.abxy .by{left:46px;top:0;color:#FFCB3D}.abxy .bx{left:0;top:46px;color:#58A8FF}.abxy .bb{right:0;top:46px;color:#FF6459}.abxy .ba{left:46px;bottom:0;color:#6FD34E}
+.abxy .by{left:calc(46*var(--c));top:0;color:#FFCB3D}.abxy .bx{left:0;top:calc(46*var(--c));color:#58A8FF}.abxy .bb{right:0;top:calc(46*var(--c));color:#FF6459}.abxy .ba{left:calc(46*var(--c));bottom:0;color:#6FD34E}
 .pills{display:flex;justify-content:center;gap:14px;position:relative;flex:none}
 .pill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:108px;min-height:44px;font-size:13px;font-weight:500;letter-spacing:.06em}
 .pill i{width:76px;height:18px;border-radius:9px;background:var(--key);box-shadow:inset 0 2px 0 #3A3C46,0 2px 0 var(--shell-lo)}
@@ -99,8 +98,10 @@ button:focus-visible{outline:3px solid #FFD54A;outline-offset:2px}
 .bul{position:absolute;background:#FFFDF4;border:calc(1*var(--u)) solid var(--ink);padding:calc(1*var(--u)) calc(3*var(--u)) calc(1.2*var(--u));font-size:calc(9.2*var(--u));line-height:1;white-space:nowrap;transform:translate(-50%,-100%);pointer-events:none}
 .bul::after{content:"";position:absolute;left:var(--t,50%);top:100%;width:calc(3*var(--u));height:calc(3*var(--u));margin-left:calc(-1.5*var(--u));background:var(--ink);clip-path:polygon(0 0,100% 0,50% 100%)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-@media (max-height:610px){.shell{gap:5px;padding-block:6px}.mark{display:none}.dpad{transform:scale(.88);margin:-8px}.pill{min-height:38px}}
-@media (max-height:610px){.abxy{transform:scale(.88);margin:-8px}}
+@media (max-height:610px){.mark{display:none}.pill{min-height:38px}}
+/* Écran large (tablette, ordinateur) : la console reste posée sur le fond. */
+@media (min-width:520px){:root{--c:1px}body{background:var(--desk)}.shell{max-width:410px;max-height:800px;border-radius:20px 20px 64px 20px;padding:9px 10px 10px;box-shadow:inset 0 3px 0 var(--shell-hi),inset 0 -6px 0 var(--shell-lo),0 14px 30px rgba(24,45,104,.35)}}
+@media (min-width:520px) and (max-height:610px){:root{--c:.86px}}
 @media (max-width:350px){.grille{display:none}.pill{min-width:92px}}
 .sortir{position:absolute;right:0;top:0;font:400 calc(10*var(--u))/1 var(--pix);color:#FFF7DD;text-shadow:1px 1px 0 #2A2233;padding:calc(2.5*var(--u)) calc(4*var(--u))}.sortir em{display:inline-grid;place-items:center;width:calc(11*var(--u));height:calc(11*var(--u));border-radius:50%;background:#1D1E24;color:#F0635A;font-style:normal;margin-right:calc(3*var(--u))}.led.pb{color:#FFB4A8}
 </style>
@@ -916,8 +917,8 @@ function dessinFiche(x){ const n = S.i, cols = [['#F6C94A', '#FFF1B0', '#C58A1E'
 function fiche(){ // carte produit, sans quitter le jeu
   const f = $('fichep'); if(!f.hidden){ f.hidden = true; bip(440); return; } if(S.mode !== 'soin' || S.fin || S.busy) return;
   const [code, nom, , achat, vente, i] = prod();
-  f.innerHTML = `<article><header><canvas width="26" height="26"></canvas><h2>${esc(nom)}<small>${esc(code)}</small></h2></header><dl><dt>Achat${prod()[6].mm ? ' / mm' : ''}</dt><dd class="prix">${euro(achat)}</dd><dt>Revente${prod()[6].mm ? ' / mm' : ''}</dt><dd class="prix">${euro(vente)}</dd><dt>Matériau</dt><dd>${esc(prod()[6].mat || '—')}</dd><dt>Fournisseur</dt><dd>${esc(prod()[6].four || '—')}</dd></dl><p><em class="gl B">B</em>Fermer</p></article>`;
-  dessinFiche(f.querySelector('canvas').getContext('2d')); f.hidden = false; air([660, 880]);
+  f.innerHTML = `<article><header><canvas width="26" height="26"></canvas><h2><span>${esc(nom)}</span><small>${esc(code)}</small></h2></header><dl><dt>Achat${prod()[6].mm ? ' / mm' : ''}</dt><dd class="prix">${euro(achat)}</dd><dt>Revente${prod()[6].mm ? ' / mm' : ''}</dt><dd class="prix">${euro(vente)}</dd><dt>Matériau</dt><dd><span>${esc(prod()[6].mat || '—')}</span></dd><dt>Fournisseur</dt><dd><span>${esc(prod()[6].four || '—')}</span></dd></dl><p><em class="gl B">B</em>Fermer</p></article>`;
+  dessinFiche(f.querySelector('canvas').getContext('2d')); f.hidden = false; f.querySelectorAll('span').forEach(e => { let t = e.textContent; while(e.scrollHeight > e.clientHeight + 2 && t.length > 4){ t = t.slice(0, -1).trimEnd(); e.textContent = t + '...'; } }); air([660, 880]);
 }
 function passer(){ if(S.mode !== 'soin' || S.choix || S.busy || S.fin) return; avance(); bip(350); rendre(); }
 function dessineAccueil(){ g.drawImage(FOND.accueil, 0, 0); SCFL.forEach(([a, b, c, p]) => b > 118 && b < 132 && fleur(a, b, c, p, now, 1)); drawPerso(153, 132, 2, 'moi', 'd', 0, 0, now % 2900 < 120); drawPerso(20, 134, 2, 'florence', 'd', 0, 0, now % 3300 < 120);
@@ -1022,6 +1023,13 @@ $('carnetBtn').onclick = () => S.mode === 'soin' ? fiche() : ouvrirCarnet(); $('
 $('sortir').onclick = quitter; $('snd').onclick = () => { son = !son; $('snd').textContent = 'SON : ' + (son ? 'OUI' : 'NON'); $('snd').setAttribute('aria-pressed', son); bip(880); };
 
 [['minus', -1], ['plus', 1]].forEach(([id, d]) => { let h = null, n = 0; const b = $(id), stop = () => clearTimeout(h), go = () => { if(n && S.choix !== 'deux') return; regler(d * (n > 30 ? 10 : n > 12 ? 5 : 1)); n++; h = setTimeout(go, n === 1 ? 380 : 70); }; b.addEventListener('pointerdown', e => { e.preventDefault(); n = 0; go(); }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(x => b.addEventListener(x, stop)); b.addEventListener('contextmenu', e => e.preventDefault()); b.addEventListener('click', e => e.detail === 0 && regler(d)); });
+/* Au doigt : ni sélection, ni loupe, ni agrandissement. Le geste système est bloqué dès le toucher, l'appui est rejoué au relâcher. */
+{ const doigts = new Map(), bloc = e => { if(e.cancelable) e.preventDefault(); }, cible = n => { const b = n && n.closest && n.closest('button,[data-o],#fichep'); return !b || b.closest('#dpad') || b.id === 'plus' || b.id === 'minus' ? null : b; };
+  document.addEventListener('touchstart', e => { bloc(e); for(const t of e.changedTouches) doigts.set(t.identifier, cible(t.target)); }, { passive:false });
+  document.addEventListener('touchmove', bloc, { passive:false });
+  document.addEventListener('touchend', e => { bloc(e); for(const t of e.changedTouches){ const b = doigts.get(t.identifier); doigts.delete(t.identifier); if(b && b.isConnected && cible(document.elementFromPoint(t.clientX, t.clientY)) === b) b.click(); } }, { passive:false });
+  document.addEventListener('touchcancel', () => doigts.clear());
+  ['gesturestart', 'gesturechange', 'gestureend', 'selectstart', 'dblclick', 'contextmenu', 'dragstart'].forEach(n => document.addEventListener(n, bloc, { passive:false })); }
 const KD = { ArrowLeft:'l', ArrowRight:'r', ArrowUp:'u', ArrowDown:'d' };
 addEventListener('keydown', e => { const d = KD[e.key]; if(d){ e.preventDefault(); if(!e.repeat) presse(d); keys.delete(d); keys.add(d); } else if(e.key === '+' || e.key === '=') regler(1); else if(e.key === '-') regler(-1); else if(e.key === 'f' || e.key === 'F') $('carnetBtn').click(); else if(e.key === 'Escape' || e.key === 'Backspace'){ e.preventDefault(); annuler(); } else if(e.key === 'Enter' && !(document.activeElement && document.activeElement.tagName === 'BUTTON')) valider(); });
 addEventListener('keyup', e => KD[e.key] && keys.delete(KD[e.key])); addEventListener('blur', () => { keys.clear(); held = null; });
