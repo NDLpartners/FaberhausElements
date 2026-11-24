@@ -549,6 +549,12 @@ button.btn-danger:hover{background:var(--error);color:#fff;}
   overflow:hidden;box-shadow:none;
 }
 .item-card .info{flex:1;min-width:0;}
+.io-stock{margin-top:12px;border:1px solid #000;padding:12px;font-size:13px;line-height:1.45;}
+.io-stock-liste{max-height:220px;overflow:auto;margin:8px 0 10px;border-top:1px solid var(--stone);}
+.io-stock-l{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--stone);font-size:12.5px;}
+.io-stock-l span:last-child{white-space:nowrap;}
+.io-stock .btn,.io-stock .btn-discrete{width:100%;margin-top:6px;justify-content:center;min-height:40px;white-space:normal;}
+.io-log-item .btn-discrete{margin:6px 0 2px;}
 .io-log-item{border-top:1px solid var(--stone);padding:8px 0;font-size:12.5px;}
 .io-log-item summary{cursor:pointer;list-style:none;}
 .io-log-item summary::-webkit-details-marker{display:none;}
@@ -3292,7 +3298,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
       <div class="form-section">
         <div class="form-section-title">Importer une mise à jour</div>
         <div class="form-section-body">
-          <div class="hint" style="margin-top:0;">Reprends le fichier exporté, complète les cellules, puis importe-le ici. Seules les cases remplies sont mises à jour ; le reste est laissé intact.</div>
+          <div class="hint" style="margin-top:0;">Reprends le fichier exporté, complète les cellules, puis importe-le ici. Seules les cases remplies sont mises à jour ; le reste est laissé intact. Si le fichier change des stocks, l'appli te les montre et te demande avant de les remplacer.</div>
           <label class="vf-check" for="io-import-creations" style="margin-top:12px;">
             <input type="checkbox" id="io-import-creations">
             <span>Les lignes sans « Code produit » sont des créations Faberhaus</span>
@@ -3306,6 +3312,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
             <div class="import-progress-track"><div class="import-progress-fill" id="io-import-progress-fill"></div></div>
             <div class="import-progress-label" id="io-import-progress-label">0 %</div>
           </div>
+          <div id="io-import-stock" class="io-stock hidden"></div>
           <div id="io-import-result" class="hint hidden" style="margin-top:8px;"></div>
 
           <div class="form-section-title" style="margin-top:22px;margin-bottom:6px;">Importer des photos</div>
@@ -3314,7 +3321,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
           <input type="file" id="io-photos-file" accept="image/*" multiple class="hidden">
           <div id="io-photos-result" class="hint hidden" style="margin-top:8px;"></div>
 
-          <button type="button" id="io-log-toggle" style="display:block;margin:22px auto 0;background:none;border:none;font:inherit;font-size:12px;opacity:.5;text-decoration:underline;cursor:pointer;color:inherit;">Historique des imports</button>
+          <div class="form-section-title" style="margin-top:22px;margin-bottom:6px;">Excel importés</div>
+          <div class="hint" style="margin-top:0;">Chaque fichier importé est gardé ici, avec la date et les changements de stock (avant → après).</div>
+          <button type="button" id="io-log-toggle" class="btn-discrete" style="margin-top:10px;">Voir les imports</button>
           <div id="io-log-panel" class="hidden" style="margin-top:10px;">
             <div id="io-log-list" class="hint" style="margin-top:0;"></div>
           </div>
@@ -4312,7 +4321,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.72 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.73 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -4389,7 +4398,7 @@ import {
   getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
-  getFirestore, collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy, writeBatch, increment, setDoc
+  getFirestore, collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy, writeBatch, increment, setDoc, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -4510,6 +4519,7 @@ async function saveWithFeedback(btn, fn, opts){
       return true;
     }catch(e){
       lastError = e;
+      if(e && e.definitif) break;
       if(attempt === 1){
         btn.textContent = 'Nouvel essai...';
         await new Promise(r => setTimeout(r, 600));
@@ -4519,11 +4529,29 @@ async function saveWithFeedback(btn, fn, opts){
 
   btn.disabled = false;
   btn.textContent = originalText;
-  const msg = lastError && lastError.message === 'TIMEOUT'
+  const msg = lastError && lastError.definitif ? lastError.message : lastError && lastError.message === 'TIMEOUT'
     ? "La sauvegarde prend trop de temps. Vérifie ta connexion et réessaie."
     : "Erreur lors de l'enregistrement : " + (lastError ? lastError.message : 'inconnue');
   alert(msg);
   return false;
+}
+
+/* ---------- Écritures du stock ----------
+   Toute variation de stock passe par une transaction : le stock est relu dans Firebase au moment d'écrire
+   (jamais celui gardé à l'écran), et chaque opération porte un identifiant, pour qu'un nouvel essai après une
+   connexion lente ne la compte pas deux fois. */
+function nouvelleOp(){ return doc(collection(db, COL)).id; }
+function arrondiStock(n){ return Math.round(n * 1e6) / 1e6; }
+function erreurDefinitive(msg){ const e = new Error(msg); e.definitif = true; return e; }
+// Champs à écrire pour un stock donné : la réserve Vinted ne dépasse jamais le stock.
+function champsStock(frais, stock){
+  const q = arrondiStock(stock), r = Math.max(0, Number(frais && frais.reserveVinted) || 0), max = Math.max(0, q);
+  return { quantiteRestante: q, updatedAt: Date.now(), ...(r > max ? { reserveVinted: max } : {}) };
+}
+// Relecture après un enregistrement réussi : si elle échoue, l'enregistrement reste valable.
+async function rechargeApres(){
+  try{ await withTimeout(loadMateriaux(), 6000); }
+  catch(e){ console.warn('Enregistré, mais la liste n\'a pas pu être relue', e); }
 }
 
 /* ---------- Auth ---------- */
@@ -5012,7 +5040,9 @@ function crNewComposant(){
 
 let crReapproSelected = null;
 
+let crOp = null, crReapproOp = null;
 function resetCreationForm(){
+  crOp = null; crReapproOp = null;
   crMode = 'nouveau';
   crModeleBase = null;
   crReapproSelected = null;
@@ -5292,6 +5322,8 @@ $('cr-save-btn').addEventListener('click', async ()=>{
 
   let codeProduit;
 
+  if(!crOp) crOp = nouvelleOp();
+  const op = crOp;
   const ok = await saveWithFeedback($('cr-save-btn'), async ()=>{
     // Recharge les données juste avant de calculer le numéro/suffixe, pour éliminer tout risque de collision
     // si une autre création a été enregistrée entre-temps (autre session, ou double clic rapide).
@@ -5324,18 +5356,28 @@ $('cr-save-btn').addEventListener('click', async ()=>{
       updatedAt: Date.now(),
     };
 
-    await addDoc(collection(db, COL), data);
     // Déduit le stock des composants utilisés (quantité par exemplaire × nombre d'exemplaires fabriqués)
-    const batch = writeBatch(db);
-    resolved.forEach(r=>{
-      const nouveauStock = Math.max(0, (r.a.quantiteRestante ?? 0) - (r.qte * nbOk));
-      batch.update(doc(db, COL, r.a.id), { quantiteRestante: nouveauStock, updatedAt: Date.now() });
+    const besoins = new Map();
+    resolved.forEach(r => besoins.set(r.a.id, (besoins.get(r.a.id) || 0) + r.qte * nbOk));
+    const ref = doc(db, COL, op);
+    codeProduit = await runTransaction(db, async tx => {
+      const deja = await tx.get(ref);
+      if(deja.exists()){   // déjà enregistrée au premier essai
+        const d = deja.data();
+        if(d.quantiteInitiale !== data.quantiteInitiale || JSON.stringify(d.composants) !== JSON.stringify(data.composants)) throw erreurDefinitive("Le premier essai avait bien été enregistré, avec d'autres valeurs. Rien n'a été ajouté : vérifie le stock avant de recommencer.");
+        return d.codeProduit;
+      }
+      const snaps = [];
+      for(const id of besoins.keys()) snaps.push(await tx.get(doc(db, COL, id)));
+      snaps.forEach(sn => { if(sn.exists()) tx.update(sn.ref, champsStock(sn.data(), Math.max(0, (Number(sn.data().quantiteRestante) || 0) - besoins.get(sn.id)))); });
+      tx.set(ref, data);
+      return data.codeProduit;
     });
-    await batch.commit();
-    await loadMateriaux();
+    await rechargeApres();
   });
 
   if(ok){
+    if(crOp === op) crOp = null;
     $('cr-success').textContent = `Création « ${codeProduit} » enregistrée, stock des composants déduit.`;
     show($('cr-success'));
     setTimeout(()=> resetCreationForm(), 1800);
@@ -5412,25 +5454,28 @@ $('cr-reappro-save-btn').addEventListener('click', async ()=>{
     return;
   }
   const composants = Array.isArray(a.composants) ? a.composants : [];
+  if(!crReapproOp || crReapproOp.a !== a.id) crReapproOp = { id: nouvelleOp(), a: a.id, nb: nbOk };
+  const op = crReapproOp;
 
   const ok = await saveWithFeedback($('cr-reappro-save-btn'), async ()=>{
-    const batch = writeBatch(db);
-    batch.update(doc(db, COL, a.id), {
-      quantiteInitiale: (a.quantiteInitiale || 0) + nbOk,
-      quantiteRestante: (a.quantiteRestante || 0) + nbOk,
-      updatedAt: Date.now(),
+    const besoins = new Map();
+    composants.forEach(c => besoins.set(c.materiauId, (besoins.get(c.materiauId) || 0) + c.quantite * nbOk));
+    await runTransaction(db, async tx => {
+      const ref = doc(db, COL, a.id), sn = await tx.get(ref);
+      if(!sn.exists()) throw erreurDefinitive("Cette création n'existe plus.");
+      const d = sn.data(), ops = Array.isArray(d.opsStock) ? d.opsStock : [];
+      if(ops.includes(op.id)){ if(op.nb !== nbOk) throw erreurDefinitive("Le premier essai avait bien été enregistré, avec d'autres valeurs. Rien n'a été ajouté : vérifie le stock avant de recommencer."); return; }
+      op.nb = nbOk;
+      const snaps = [];
+      for(const id of besoins.keys()) snaps.push(await tx.get(doc(db, COL, id)));
+      tx.update(ref, { ...champsStock(d, (Number(d.quantiteRestante) || 0) + nbOk), quantiteInitiale: arrondiStock((Number(d.quantiteInitiale) || 0) + nbOk), opsStock: [...ops, op.id].slice(-5) });
+      snaps.forEach(x => { if(x.exists()) tx.update(x.ref, champsStock(x.data(), Math.max(0, (Number(x.data().quantiteRestante) || 0) - besoins.get(x.id)))); });
     });
-    composants.forEach(c=>{
-      const comp = materiaux.find(m=>m.id===c.materiauId);
-      if(!comp) return;
-      const nouveauStock = Math.max(0, (comp.quantiteRestante ?? 0) - (c.quantite * nbOk));
-      batch.update(doc(db, COL, comp.id), { quantiteRestante: nouveauStock, updatedAt: Date.now() });
-    });
-    await batch.commit();
-    await loadMateriaux();
+    await rechargeApres();
   });
 
   if(ok){
+    if(crReapproOp === op) crReapproOp = null;
     $('cr-success').textContent = `${nbOk} exemplaire(s) de plus pour « ${a.codeProduit} », stock des composants déduit.`;
     show($('cr-success'));
     setTimeout(()=> resetCreationForm(), 1800);
@@ -6363,6 +6408,7 @@ $('f-dimensions-copy').addEventListener('click', (e)=>{
 
 /* ---------- Inventaire : formulaire ---------- */
 let editingId = null;
+let ficheStock = null, ficheRef = null;   // stock affiché à l'ouverture de la fiche ; identifiant d'un nouvel article
 let fPrixEtsyIsAuto = false;
 // Photo miniature (data URL JPEG réduite, stockée dans la fiche article)
 let fPhoto = null;
@@ -6558,6 +6604,8 @@ function openInventaireForm(id){
   $('f-ttc').value = a?.prixTTC != null ? String(a.prixTTC).replace('.',',') : '';
   $('f-qteInitiale').value = a?.quantiteInitiale ?? '';
   $('f-qteRestante').value = a?.quantiteRestante ?? '';
+  ficheStock = a ? { i: a.quantiteInitiale ?? null, r: a.quantiteRestante ?? null } : null;
+  ficheRef = null;
   $('f-prixEtsy').value = a?.prixEtsy != null ? String(Math.ceil(a.prixEtsy*100)/100).replace('.',',') : '';
   $('f-prixPublic').value = a?.prixPublic != null ? String(a.prixPublic).replace('.',',') : '';
   updatePvrSiteLine();
@@ -6983,9 +7031,12 @@ $('inv-form-save').addEventListener('click', async ()=>{
   const nomCourt = $('f-nomCourt').value.trim();
   if(!nomCourt){ errEl.textContent = "Le nom court est requis."; show(errEl); return; }
 
-  const numero = parseInt($('f-numero').value, 10);
-  const type = $('f-type').value;
-  const code = TYPE_CODES[type] || '?';
+  const fiche = editingId ? materiaux.find(m=>m.id===editingId) : null;
+  const creation = !!(fiche && fiche.estCreation === true);   // une création garde son code « FH » et son type
+  const numeroSaisi = parseInt($('f-numero').value, 10);
+  const numero = fiche && Math.floor(fiche.numero) === numeroSaisi ? fiche.numero : numeroSaisi;
+  const type = creation ? (fiche.type || fiche.typeCreation || $('f-type').value) : $('f-type').value;
+  const code = creation ? CR_LETTRES : (TYPE_CODES[type] || '?');
   const codeProduit = code + numero;
 
   const htva = parseNum($('f-htva').value);
@@ -7015,16 +7066,35 @@ $('inv-form-save').addEventListener('click', async ()=>{
     prixUnitaire = ttc / pieces;
   }
 
+  // Le stock n'est écrit que s'il a été modifié dans la fiche ; s'il a bougé ailleurs entre-temps, on prévient.
+  const initModifie = !editingId || (!isNaN(qteInitiale) && qteInitiale !== ficheStock?.i);
+  const stockModifie = !editingId || (!isNaN(qteRestanteInput) && qteRestanteInput !== ficheStock?.r);
+  if(editingId && (stockModifie || initModifie)){
+    let frais = null;
+    try{ const sn = await withTimeout(getDoc(doc(db, COL, editingId)), 8000); frais = sn.exists() ? sn.data() : null; }
+    catch(e){ errEl.textContent = "Le stock actuel n'a pas pu être vérifié. Vérifie ta connexion et réessaie."; show(errEl); return; }
+    if(!frais){ errEl.textContent = "Cet article a été supprimé entre-temps."; show(errEl); return; }
+    const bouge = [];
+    if(stockModifie && (frais.quantiteRestante ?? null) !== ficheStock.r) bouge.push(`Stock restant : ${fmtNum(ficheStock.r, 0)} à l'ouverture, ${fmtNum(frais.quantiteRestante, 0)} maintenant, tu enregistres ${fmtNum(qteRestanteInput, 0)}`);
+    if(initModifie && (frais.quantiteInitiale ?? null) !== ficheStock.i) bouge.push(`Quantité initiale : ${fmtNum(ficheStock.i, 0)} à l'ouverture, ${fmtNum(frais.quantiteInitiale, 0)} maintenant, tu enregistres ${fmtNum(qteInitiale, 0)}`);
+    if(bouge.length && !confirm("Le stock a changé pendant que cette fiche était ouverte (vente, réappro…).\n" + bouge.join('\n') + "\n\nEnregistrer quand même ta valeur ?")) return;
+    ficheStock.frais = frais;
+  }
+  let boiteCreee = null, data = null;
+  const idFiche = editingId, stockFrais = ficheStock?.frais;
+  if(!idFiche && !ficheRef) ficheRef = doc(collection(db, COL));
+  const refFiche = idFiche ? doc(db, COL, idFiche) : ficheRef;
+
   const ok = await saveWithFeedback($('inv-form-save'), async ()=>{
-    let storageBoxId = $('f-storageBoxId').value || null;
+    let storageBoxId = boiteCreee || $('f-storageBoxId').value || null;
     const newBoxName = $('f-storageBoxNew').value.trim();
-    if(newBoxName){
+    if(newBoxName && !boiteCreee){
       const ref = await addDoc(collection(db, 'storageBoxes'), { nom: newBoxName });
-      storageBoxId = ref.id;
+      storageBoxId = boiteCreee = ref.id;
       await loadStorageBoxes();
     }
 
-    const data = {
+    if(!data) data = {
       nomCourt,
       nomSeo: $('f-nomSeo').value.trim(),
       nomSeoEn: $('f-nomSeoEn').value.trim(),
@@ -7057,9 +7127,9 @@ $('inv-form-save').addEventListener('click', async ()=>{
       prixHTVA: isNaN(htva) ? null : htva,
       tva: isNaN(tva) ? 0.21 : tva,
       prixTTC: isNaN(ttc) ? null : ttc,
-      prixUnitaire: prixUnitaire,
-      quantiteInitiale: isNaN(qteInitiale) ? (existing?.quantiteInitiale ?? 0) : qteInitiale,
-      quantiteRestante: isNaN(qteRestanteInput) ? (existing?.quantiteRestante ?? (isNaN(qteInitiale) ? 0 : qteInitiale)) : qteRestanteInput,
+      ...(!existing || prixUnitaire !== (existing.prixUnitaire ?? null) ? { prixUnitaire } : {}),
+      ...(initModifie ? { quantiteInitiale: isNaN(qteInitiale) ? 0 : qteInitiale } : {}),
+      ...(stockModifie ? champsStock(stockFrais, isNaN(qteRestanteInput) ? (isNaN(qteInitiale) ? 0 : qteInitiale) : qteRestanteInput) : {}),
       code,
       codeProduit,
       storageBoxId,
@@ -7075,12 +7145,9 @@ $('inv-form-save').addEventListener('click', async ()=>{
       photoNom: fPhotoNom || null,
     };
 
-    if(editingId){
-      await updateDoc(doc(db, COL, editingId), data);
-    } else {
-      await addDoc(collection(db, COL), data);
-    }
-    await loadMateriaux();
+    if(idFiche) await updateDoc(refFiche, data);
+    else await setDoc(refFiche, data);   // même identifiant si un nouvel essai est nécessaire : jamais de doublon
+    await rechargeApres();
   });
 
   if(ok){
@@ -8026,7 +8093,9 @@ function fillPaysSelect(){
   fillPaysSelectInto('vente-pays');
 }
 
+let venteOp = null;
 function resetVenteForm(){
+  venteOp = null;
   venteLignes = [{ materiauId:'', quantite:'', prix:'' }];
   venteLignesLibres = [];
   venteTotalManuallySet = false;
@@ -8279,12 +8348,13 @@ $('vente-save-btn').addEventListener('click', async ()=>{
   }
 
   // Vérification du stock
-  const insuffisants = [];
-  validLignes.forEach(l=>{
-    const a = materiaux.find(m=>m.id===l.materiauId);
-    const q = parseNum(l.quantite);
+  const insuffisants = [], stockAccepte = new Set(), demande = new Map();
+  validLignes.forEach(l => demande.set(l.materiauId, arrondiStock((demande.get(l.materiauId) || 0) + parseNum(l.quantite))));
+  demande.forEach((q, id) => {
+    const a = materiaux.find(m=>m.id===id);
     if(a && q > (a.quantiteRestante||0)){
       insuffisants.push(`${a.nomCourt} : reste ${fmtNum(a.quantiteRestante,0)}, tu en vends ${fmtNum(q,0)}`);
+      stockAccepte.add(id);
     }
   });
   if(insuffisants.length > 0){
@@ -8328,45 +8398,55 @@ $('vente-save-btn').addEventListener('click', async ()=>{
     const depasse = [];
     tot.forEach((q, id) => {
       const m = materiaux.find(x => x.id === id); if(!m) return;
-      const r = reserveVinted(m);
+      const r = stockVinted(m);
       if(q > r) depasse.push(`${m.codeProduit || m.nomCourt} : ${fmtNum(q, 0)} vendu${q > 1 ? 's' : ''}, réserve Vinted ${fmtNum(r, 0)} (${fmtNum(q - r, 0)} pris sur le stock du site)`);
     });
     if(depasse.length && !confirm("Cette vente Vinted dépasse la réserve :\n" + depasse.join('\n') + "\n\nConfirmer quand même ?")) return;
   }
+  if(!venteOp) venteOp = nouvelleOp();
+  const op = venteOp, venteRef = doc(db, 'ventes', op);
+  const infos = { date: $('vente-date').value.trim() || todayISO(), heure: $('vente-heure').value.trim() || null, plateforme: $('vente-plateforme').value, pays: $('vente-pays').value };
+  const vinted = infos.plateforme === 'Vinted';
   const ok = await saveWithFeedback($('vente-save-btn'), async ()=>{
-    const batch = writeBatch(db);
-    const venteRef = doc(collection(db, 'ventes'));
-    // Vente Vinted : les pièces vendues sortent d'abord de la réserve Vinted
-    const reserveLeft = new Map();
-    if($('vente-plateforme').value === 'Vinted'){
-      lignesData.forEach(l => {
-        const m = materiaux.find(x => x.id === l.materiauId); if(!m) return;
-        const dispo = reserveLeft.has(m.id) ? reserveLeft.get(m.id) : reserveVinted(m);
-        const d = Math.min(dispo, Number(l.quantite) || 0);
-        l.reserveRetiree = d; reserveLeft.set(m.id, dispo - d);
+    const resume = L => JSON.stringify((L || []).map(l => [l.materiauId, l.quantite]));
+    await runTransaction(db, async tx => {
+      const deja = await tx.get(venteRef);
+      if(deja.exists()){   // enregistrée au premier essai : ne pas retirer le stock une deuxième fois
+        if(resume(deja.data().lignes) !== resume(lignesData) || deja.data().prixVente !== prixVenteTotal) throw erreurDefinitive("Cette vente a déjà été enregistrée au premier essai, avec d'autres valeurs. Rien n'a été ajouté : corrige-la dans l'historique des ventes.");
+        return;
+      }
+      const snaps = new Map();
+      for(const id of demande.keys()) snaps.set(id, await tx.get(doc(db, COL, id)));
+      const ecrire = [];
+      demande.forEach((q, id) => {
+        const sn = snaps.get(id);
+        if(!sn.exists()) throw erreurDefinitive("Un article de cette vente a été supprimé entre-temps. Actualise la page.");
+        const d = sn.data(), avant = Number(d.quantiteRestante) || 0, apres = arrondiStock(avant - q);
+        if(apres < 0 && !stockAccepte.has(id)) throw erreurDefinitive(`Le stock a changé entre-temps. ${d.nomCourt || d.codeProduit} : reste ${fmtNum(avant, 0)}, tu en vends ${fmtNum(q, 0)}. Vérifie, puis enregistre à nouveau.`);
+        // Vente Vinted : les pièces vendues sortent d'abord de la réserve. Dans tous les cas, la réserve ne dépasse jamais le stock.
+        const r = Math.max(0, Number(d.reserveVinted) || 0);
+        const r2 = Math.min(vinted ? Math.max(0, r - q) : r, Math.max(0, apres));
+        const lignes = lignesData.filter(l => l.materiauId === id);
+        lignes.forEach((l, i) => { l.reserveRetiree = i === 0 ? arrondiStock(r - r2) : 0; });
+        ecrire.push([sn.ref, { quantiteRestante: apres, updatedAt: Date.now(), ...(r2 !== r ? { reserveVinted: arrondiStock(r2) } : {}) }]);
       });
-    }
-    batch.set(venteRef, {
-      lignes: lignesData,
-      lignesLibres: lignesLibresData,
-      prixVente: prixVenteTotal,
-      benefice,
-      date: $('vente-date').value.trim() || todayISO(),
-      heure: $('vente-heure').value.trim() || null,
-      plateforme: $('vente-plateforme').value,
-      pays: $('vente-pays').value,
-      numeroFacture: numFacture, clientNom, clientAdresse, clientEmail,
-      createdAt: Date.now()
+      tx.set(venteRef, {
+        lignes: lignesData,
+        lignesLibres: lignesLibresData,
+        prixVente: prixVenteTotal,
+        benefice,
+        ...infos,
+        numeroFacture: numFacture, clientNom, clientAdresse, clientEmail,
+        createdAt: Date.now()
+      });
+      ecrire.forEach(([ref, d]) => tx.update(ref, d));
     });
-    lignesData.forEach(l=>{
-      const mRef = doc(db, COL, l.materiauId);
-      batch.update(mRef, { quantiteRestante: increment(-l.quantite), ...(l.reserveRetiree > 0 ? { reserveVinted: increment(-l.reserveRetiree) } : {}) });
-    });
-    await batch.commit();
-    await loadMateriaux();
+    await rechargeApres();
   });
 
+  if(!ok) rechargeApres();   // stock à jour pour le prochain essai
   if(ok){
+    if(venteOp === op) venteOp = null;
     hide($('vente-form-body'));
     hide($('vente-error'));
     show($('vente-success-block'));
@@ -9739,7 +9819,7 @@ $('home-pulse').addEventListener('click', e => {
    Stock pour le site = stock restant − réserve (0 si l'article n'est pas vendable sur le site)
    ================================================================== */
 const SITE_CANAUX = [['site', 'Vendable sur le site'], ['non-site', 'Pas vendable sur le site'], ['vinted-seul', 'Vendu uniquement sur Vinted']];
-function reserveVinted(a){ return Math.max(0, Number(a && a.reserveVinted) || 0); }
+function reserveVinted(a){ return Math.min(Math.max(0, Number(a && a.quantiteRestante) || 0), Math.max(0, Number(a && a.reserveVinted) || 0)); }
 function rsvCanal(a){ const c = (a && a.canalSite) || 'site'; return c === 'non-site' ? 'vinted-seul' : c; }
 function stockSite(a){
   const c = rsvCanal(a);
@@ -9938,7 +10018,7 @@ function preOuvre(){
   if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.72'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.73'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -11521,13 +11601,24 @@ $('vf-delete-btn').addEventListener('click', async ()=>{
   const v = ventes.find(x=>x.id===editingVenteId);
   if(!v) return;
   if(!confirmDelete("Supprimer cette vente ? Le stock des articles concernés sera restauré.")) return;
-  const batch = writeBatch(db);
-  batch.delete(doc(db,'ventes',v.id));
-  v.lignes.forEach(l=>{
-    batch.update(doc(db, COL, l.materiauId), { quantiteRestante: increment(l.quantite), ...(l.reserveRetiree > 0 ? { reserveVinted: increment(l.reserveRetiree) } : {}) });
+  const ok = await saveWithFeedback($('vf-delete-btn'), async ()=>{
+    await runTransaction(db, async tx => {
+      const ref = doc(db, 'ventes', v.id), sv = await tx.get(ref);
+      if(!sv.exists()) return;   // déjà supprimée : le stock n'est rendu qu'une fois
+      const rendu = new Map();
+      (sv.data().lignes || []).forEach(l => { const r = rendu.get(l.materiauId) || [0, 0]; rendu.set(l.materiauId, [r[0] + (Number(l.quantite) || 0), r[1] + (Number(l.reserveRetiree) || 0)]); });
+      const snaps = [];
+      for(const id of rendu.keys()) if(id) snaps.push(await tx.get(doc(db, COL, id)));
+      tx.delete(ref);
+      snaps.forEach(sn => {
+        if(!sn.exists()) return;   // article supprimé depuis : rien à rendre
+        const d = sn.data(), [q, r] = rendu.get(sn.id), stock = arrondiStock((Number(d.quantiteRestante) || 0) + q);
+        tx.update(sn.ref, { quantiteRestante: stock, updatedAt: Date.now(), ...(r > 0 ? { reserveVinted: Math.min(Math.max(0, stock), arrondiStock((Number(d.reserveVinted) || 0) + r)) } : {}) });
+      });
+    });
+    await rechargeApres();
   });
-  await batch.commit();
-  await loadMateriaux();
+  if(!ok) return;
   navigate('historique');
 });
 
@@ -12070,6 +12161,7 @@ $('texte-import-file').addEventListener('change', async (e)=>{
   const resultEl = $('texte-import-result');
   hide(resultEl);
 
+  let trace = null, bilan = () => ({});
   try{
     const buf = await file.arrayBuffer();
     const wb = XLSX.read(buf, { type:'array' });
@@ -12080,6 +12172,10 @@ $('texte-import-file').addEventListener('change', async (e)=>{
     // aurait légèrement modifié l'en-tête), en se basant sur celle exportée par l'app.
     const codeCol = 'Code produit';
     let updated = 0, skippedNoMatch = 0, skippedNoChange = 0;
+    const suivi = [], updatedCodes = [];
+    trace = await archiveImport({ type:'textes', fichier: file.name, taille: file.size }, buf);
+    if(!trace){ resultEl.textContent = "Import annulé : rien n'a été modifié."; show(resultEl); return; }
+    bilan = () => ({ updated, skippedNoMatch, skippedNoChange, updatedCodes, changements: suivi });
 
     for(const row of rows){
       const code = String(row[codeCol] || '').trim();
@@ -12099,8 +12195,10 @@ $('texte-import-file').addEventListener('change', async (e)=>{
 
       if(Object.keys(changes).length === 0){ skippedNoChange++; continue; }
       await updateDoc(doc(db, COL, article.id), changes);
-      updated++;
+      Object.keys(changes).forEach(k => suivi.push([article.codeProduit, k, courtTrace(article[k]), courtTrace(changes[k])]));
+      updated++; updatedCodes.push(article.codeProduit);
     }
+    await finImport(trace, 'termine', bilan());
 
     await loadMateriaux();
     renderDescriptionSelect();
@@ -12109,6 +12207,7 @@ $('texte-import-file').addEventListener('change', async (e)=>{
       (skippedNoChange > 0 ? ` ${skippedNoChange} article(s) sans changement.` : '');
     show(resultEl);
   }catch(err){
+    if(trace) await finImport(trace, 'interrompu', { ...bilan(), erreur: String(err && err.message || err) });
     resultEl.textContent = "Erreur lors de la lecture du fichier : " + err.message;
     show(resultEl);
   }finally{
@@ -12272,7 +12371,9 @@ $('desc-save-btn').addEventListener('click', async ()=>{
 $('reception-nouveau-btn').addEventListener('click', ()=> openInventaireForm(null));
 $('reception-reappro-btn').addEventListener('click', ()=> navigate('reappro'));
 
+let reapproOp = null;
 function resetReapproForm(){
+  reapproOp = null;
   const sel = $('reappro-select');
   sel.innerHTML = '<option value="">— Choisir —</option>' +
     activeMateriaux().map(a => `<option value="${a.id}">${optionLabel(a)}</option>`).join('');
@@ -12336,7 +12437,7 @@ function updateReapproPreview(){
     return;
   }
   const nouveauPrixUnitaire = prixTTC / pieces;
-  const stockActuel = a.quantiteRestante || 0;
+  const stockActuel = Math.max(0, a.quantiteRestante || 0);
   const prixActuel = a.prixUnitaire || 0;
   const totalPieces = stockActuel + pieces;
   const prixPondere = totalPieces > 0
@@ -12376,27 +12477,34 @@ $('reappro-save-btn').addEventListener('click', async ()=>{
     return;
   }
   const nouveauPrixUnitaire = prixTTC / pieces;
-  const stockActuel = a.quantiteRestante || 0;
-  const prixActuel = a.prixUnitaire || 0;
-  const totalPieces = stockActuel + pieces;
-  const prixPondere = totalPieces > 0
-    ? (stockActuel * prixActuel + pieces * nouveauPrixUnitaire) / totalPieces
-    : nouveauPrixUnitaire;
   const tva = a.tva != null ? a.tva : 0.21;
+  if(!reapproOp || reapproOp.a !== a.id) reapproOp = { id: nouvelleOp(), a: a.id, nb: pieces, ttc: prixTTC };
+  const op = reapproOp;
 
   const ok = await saveWithFeedback($('reappro-save-btn'), async ()=>{
-    await updateDoc(doc(db, COL, a.id), {
-      prixUnitaire: prixPondere,
-      prixTTC: prixTTC,
-      prixHTVA: prixTTC / (1 + tva),
-      piecesParPaquet: pieces,
-      longueurPaquetM: a.venduALaLongueur ? rawInput : (a.longueurPaquetM ?? null),
-      quantiteInitiale: (a.quantiteInitiale || 0) + pieces,
-      quantiteRestante: (a.quantiteRestante || 0) + pieces,
+    await runTransaction(db, async tx => {
+      const ref = doc(db, COL, a.id), sn = await tx.get(ref);
+      if(!sn.exists()) throw erreurDefinitive("Cet article n'existe plus.");
+      const d = sn.data(), ops = Array.isArray(d.opsStock) ? d.opsStock : [];
+      if(ops.includes(op.id)){ if(op.nb !== pieces || op.ttc !== prixTTC) throw erreurDefinitive("Le premier essai avait bien été enregistré, avec d'autres valeurs. Rien n'a été ajouté : vérifie le stock avant de recommencer."); return; }
+      op.nb = pieces; op.ttc = prixTTC;
+      // Prix moyen pondéré et stock calculés sur le stock réel du moment
+      const stockActuel = Number(d.quantiteRestante) || 0, enStock = Math.max(0, stockActuel), totalPieces = enStock + pieces;
+      tx.update(ref, {
+        ...champsStock(d, stockActuel + pieces),
+        prixUnitaire: (enStock * (d.prixUnitaire || 0) + pieces * nouveauPrixUnitaire) / totalPieces,
+        prixTTC: prixTTC,
+        prixHTVA: prixTTC / (1 + tva),
+        piecesParPaquet: pieces,
+        longueurPaquetM: a.venduALaLongueur ? rawInput : (a.longueurPaquetM ?? null),
+        quantiteInitiale: arrondiStock((Number(d.quantiteInitiale) || 0) + pieces),
+        opsStock: [...ops, op.id].slice(-5),
+      });
     });
-    await loadMateriaux();
+    await rechargeApres();
   });
   if(ok){
+    if(reapproOp === op) reapproOp = null;
     hide($('reappro-form-body'));
     show($('reappro-success-block'));
   }
@@ -12649,6 +12757,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'35.73', items:["Stock : ventes, réappros, créations, suppressions de vente et pesées relisent le stock réel avant d'écrire et ne peuvent plus compter deux fois quand la connexion est lente.","Fiche produit : le stock n'est enregistré que s'il a été modifié ; avertissement s'il a changé ailleurs entre-temps. Une création garde son code FH.","Réserve Vinted : ne dépasse plus jamais le stock ; l'avertissement de vente Vinted tient compte des articles « Vinted seul ».","Import Excel : l'appli montre les stocks qui changeraient et garde les siens par défaut. Chaque fichier importé est archivé (date, changements avant → après, téléchargement) dans « Excel importés »."] },
   { v:'35.72', items:["Le Pré de Caramel : des papiers peuvent traîner dans le jardin de la maison. Une fois trouvés, Emile vient les contrôler.","Le Pré de Caramel : musique de fond douce, « L'as-tu vu » le jour et « Plaisir d'amour » le soir (bouton SON).","Le Pré de Caramel : les trouvailles apparaissent au hasard dans tout le pré. Emile vient toutes les 4 minutes, et le soir a sa propre phrase d'accueil.","Correctif : dans Le Pré de Caramel, Emile restait bloqué en arrivant et l'ordre des produits pouvait se décaler."] },
   { v:'35.71', items:["Le Pré de Caramel : quand on quitte puis rouvre le jeu, Florence reprend devant la maison.","Nouvel encodage : une carte « Réserve Vinted » ouvre directement Le Pré de Caramel.","Réserve Vinted : le bouton « Jouer » est moins haut et porte une icône de manette d'arcade."] },
   { v:'35.70', items:["Le Pré de Caramel : la console commence sous le voile clair que l'iPhone affiche en haut de l'écran. Le bouton d'accueil affiche toujours « Jouer »."] },
@@ -14814,6 +14923,7 @@ $('io-import-file').addEventListener('change', async (e)=>{
   progressFill.style.width = '0%';
   progressLabel.textContent = '0 %';
   show(progressWrap);
+  let trace = null, bilan = () => ({});
 
   try{
     const buf = await file.arrayBuffer();
@@ -14824,6 +14934,20 @@ $('io-import-file').addEventListener('change', async (e)=>{
     const codeCol = 'Code produit';
     let updated = 0, skippedNoMatch = 0, skippedNoChange = 0, boxesCreated = 0;
     let created = 0, skippedDup = 0;
+    await withTimeout(loadMateriaux(), 20000);   // comparer avec les stocks réels, pas ceux restés à l'écran
+    const stocksFichier = changementsStock(rows);
+    let remplacer = false;
+    if(stocksFichier.length){
+      hide(progressWrap);
+      const choix = await demandeStock(stocksFichier, file.name);
+      if(choix === 'annuler'){ resultEl.textContent = "Import annulé : rien n'a été modifié."; show(resultEl); return; }
+      remplacer = choix === 'remplacer';
+      show(progressWrap);
+    }
+    trace = await archiveImport({ type:'excel', fichier: file.name, taille: file.size, stocksRemplaces: remplacer }, buf);
+    if(!trace){ resultEl.textContent = "Import annulé : rien n'a été modifié."; show(resultEl); return; }
+    const suivi = [];
+    bilan = () => ({ creations: asCreations, created, updated, skippedDup, skippedNoMatch, skippedNoChange, boxesCreated, badTypes: Array.from(badTypes), createdCodes, updatedCodes, stocksGardes: remplacer ? [] : stocksFichier, changements: suivi });
     const asCreations = $('io-import-creations').checked;
     const badTypes = new Set(), createdCodes = [], updatedCodes = [];
     const total = rows.length;
@@ -14913,6 +15037,7 @@ $('io-import-file').addEventListener('change', async (e)=>{
         if(c.type === 'number'){
           const num = parseNum(cell);
           if(isNaN(num)) continue;
+          if(!remplacer && STOCK_CHAMPS.includes(c.key)) continue;   // stock de l'appli gardé
           if(num !== article[c.key]) changes[c.key] = num;
         } else if(c.type === 'boxName'){
           let box = storageBoxes.find(b => b.nom.toLowerCase() === cell.toLowerCase());
@@ -14940,25 +15065,31 @@ $('io-import-file').addEventListener('change', async (e)=>{
       if(canalImp && canalImp !== rsvCanal(article)) changes.canalSite = canalImp;
 
       if(Object.keys(changes).length === 0){ skippedNoChange++; continue; }
+      if('quantiteRestante' in changes) Object.assign(changes, champsStock(article, changes.quantiteRestante));
       changes.updatedAt = Date.now();
+      const avant = {}; Object.keys(changes).forEach(k => avant[k] = article[k]);
       await updateDoc(doc(db, COL, article.id), changes);
+      Object.assign(article, changes);
+      Object.keys(changes).forEach(k => { if(k !== 'updatedAt') suivi.push([article.codeProduit, k, courtTrace(avant[k]), courtTrace(changes[k])]); });
       updated++; updatedCodes.push(article.codeProduit);
     }
 
     await loadMateriaux();
     renderIoProductList();
-    logImport({ type:'excel', fichier: file.name, creations: asCreations, created, updated, skippedDup, skippedNoMatch, skippedNoChange,
-      boxesCreated, badTypes: Array.from(badTypes), createdCodes, updatedCodes: updatedCodes.slice(0, 80) });
+    const traceOk = await finImport(trace, 'termine', bilan());
     resultEl.textContent = (created > 0 ? `${created} nouveau(x) produit(s) créé(s) (${createdCodes.join(', ')}). ` : '') +
       (skippedDup > 0 ? `${skippedDup} ligne(s) ignorée(s) : produit déjà présent (même nom et même référence magasin). ` : '') +
       (badTypes.size > 0 ? `Catégorie inconnue, lignes ignorées : ${Array.from(badTypes).join(', ')}. ` : '') +
       `${updated} article(s) mis à jour.` +
       (boxesCreated > 0 ? ` ${boxesCreated} nouvelle(s) storage box(es) créée(s).` : '') +
       (skippedNoMatch > 0 ? ` ${skippedNoMatch} ligne(s) sans code produit correspondant, ignorée(s).` : '') +
-      (skippedNoChange > 0 ? ` ${skippedNoChange} article(s) sans changement.` : '');
+      (skippedNoChange > 0 ? ` ${skippedNoChange} article(s) sans changement.` : '') +
+      (stocksFichier.length ? (remplacer ? ` Stock remplacé sur ${new Set(stocksFichier.map(x => x[0])).size} article(s).` : ` Stocks de l'appli gardés (${new Set(stocksFichier.map(x => x[0])).size} article(s) différaient dans le fichier).`) : '') +
+      (!trace.archive ? ' Fichier non archivé.' : traceOk ? ' Fichier archivé.' : " Fichier archivé, mais le détail des changements n'a pas pu être enregistré.");
     show(resultEl);
   }catch(err){
-    resultEl.textContent = "Erreur lors de la lecture du fichier : " + err.message;
+    if(trace) await finImport(trace, 'interrompu', { ...bilan(), erreur: String(err && err.message || err) });
+    resultEl.textContent = (trace ? "Import interrompu avant la fin, une partie a pu être appliquée (voir « Voir les imports ») : " : "Erreur lors de la lecture du fichier : ") + (err && err.message === 'TIMEOUT' ? 'connexion trop lente.' : err.message);
     show(resultEl);
   }finally{
     hide(progressWrap);
@@ -14966,50 +15097,157 @@ $('io-import-file').addEventListener('change', async (e)=>{
   }
 });
 
-/* ---------- Historique des imports (Excel et photos) ---------- */
-async function logImport(entry){
-  try{
-    await addDoc(collection(db, 'importLog'), { ...entry, date: Date.now() });
-    if(!$('io-log-panel').classList.contains('hidden')) renderImportLog();
-  }catch(err){ console.warn("Journal d'import non enregistré :", err); }
+/* ---------- Archive des imports (Excel et photos) ----------
+   companyInfo/imports : la liste ; companyInfo/import-<id> : le détail ; companyInfo/import-<id>-<n> : le fichier (en base64). */
+const STOCK_CHAMPS = ['quantiteRestante', 'quantiteInitiale'];
+const IMP_MORCEAU = 700000, IMP_MAX = 12;
+const libelleChamp = k => (FULL_IO_COLUMNS.find(c => c.key === k) || {}).label || ({ canalSite:'Canal de vente', storageBoxId:'Storage box', reserveVinted:'Réservé Vinted' })[k] || k;
+const courtTrace = v => v === undefined || v === null ? null : typeof v === 'number' || typeof v === 'boolean' ? v : String(Array.isArray(v) ? v.join(', ') : v).slice(0, 80);
+// Stocks du fichier qui diffèrent de ceux de l'appli : [code, champ, avant, après]
+function changementsStock(rows){
+  const L = [];
+  rows.forEach(row => {
+    const code = String(row['Code produit'] || '').trim().toLowerCase(); if(!code) return;
+    const a = materiaux.find(x => (x.codeProduit || '').toLowerCase() === code); if(!a) return;
+    STOCK_CHAMPS.forEach(k => {
+      const n = parseNum(row[FULL_IO_COLUMNS.find(c => c.key === k).label]);
+      if(!isNaN(n) && n !== a[k]) L.push([a.codeProduit, k, a[k] ?? null, n]);
+    });
+  });
+  return L;
 }
+function lignesStock(L){
+  return L.map(([code, k, av, ap]) => `<div class="io-stock-l"><span><b>${escHtml(code)}</b> · ${escHtml(libelleChamp(k))}</span><span>${escHtml(av === null ? '—' : fmtNum(av, 2))} → <b>${escHtml(fmtNum(ap, 2))}</b></span></div>`).join('');
+}
+function demandeStock(L, nom){
+  const box = $('io-import-stock'), n = new Set(L.map(x => x[0])).size;
+  box.innerHTML = `<div><b>« ${escHtml(nom)} » contient un autre stock pour ${n} article${n > 1 ? 's' : ''}.</b> Si ce fichier a été exporté avant des ventes ou un recomptage, garde les stocks de l'appli.</div>
+    <div class="io-stock-liste">${lignesStock(L)}</div>
+    <button type="button" class="btn btn-primary" data-ch="garder">Garder les stocks de l'appli</button>
+    <button type="button" class="btn-discrete" data-ch="remplacer">Remplacer par les stocks du fichier (${n})</button>
+    <button type="button" class="btn-discrete" data-ch="annuler">Annuler l'import</button>`;
+  show(box); box.scrollIntoView({ behavior:'smooth', block:'center' });
+  $('io-import-btn').disabled = true;
+  return new Promise(ok => {
+    box.onclick = e => {
+      const c = e.target.closest('[data-ch]'); if(!c) return;
+      if(c.dataset.ch === 'remplacer' && !confirm(`Remplacer le stock de ${n} article${n > 1 ? 's' : ''} par celui du fichier ?`)) return;
+      box.onclick = null; box.innerHTML = ''; hide(box); $('io-import-btn').disabled = false;
+      ok(c.dataset.ch);
+    };
+  });
+}
+function enBase64(buf){
+  const o = new Uint8Array(buf); let t = '';
+  for(let i = 0; i < o.length; i += 32768) t += String.fromCharCode.apply(null, o.subarray(i, i + 32768));
+  return btoa(t);
+}
+function indexImport(id, meta){ return setDoc(doc(db, 'companyInfo', 'imports'), { [id]: meta }, { merge: true }); }
+// Garde le fichier AVANT d'appliquer l'import. Renvoie null si l'utilisateur préfère annuler quand l'archivage échoue.
+async function archiveImport(meta, buf){
+  const id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const t = { id, archive: false, meta: { ...meta, date: Date.now(), statut: 'encours', morceaux: 0 } };
+  try{
+    if(buf){
+      const b64 = enBase64(buf), n = Math.ceil(b64.length / IMP_MORCEAU);
+      if(n > IMP_MAX) throw new Error('fichier trop gros pour être archivé');
+      for(let i = 0; i < n; i++) await withTimeout(setDoc(doc(db, 'companyInfo', `import-${id}-${i}`), { b64: b64.slice(i * IMP_MORCEAU, (i + 1) * IMP_MORCEAU), nom: meta.fichier || '' }), 30000);
+      t.meta.morceaux = n;
+    }
+    await withTimeout(indexImport(id, t.meta), 15000);
+    t.archive = true;
+    return t;
+  } catch(err){
+    console.error('Archivage impossible', err);
+    if(!buf) return t;
+    return confirm("Ce fichier n'a pas pu être archivé (" + (err.message === 'TIMEOUT' ? 'connexion trop lente' : err.message) + ").\n\nL'importer quand même, sans en garder la trace ?") ? t : null;
+  }
+}
+async function finImport(t, statut, d){
+  if(!t || !t.archive) return false;
+  try{
+    const detail = { ...d, changements: (d.changements || []).slice() };
+    let json = JSON.stringify(detail);
+    if(json.length > 450000){   // les stocks d'abord, puis le reste tant qu'il y a la place
+      detail.changements.sort((a, b) => STOCK_CHAMPS.includes(b[1]) - STOCK_CHAMPS.includes(a[1]));
+      detail.changementsTotal = detail.changements.length;
+      while(json.length > 450000 && detail.changements.length){ detail.changements.length = Math.floor(detail.changements.length * .8); json = JSON.stringify(detail); }
+    }
+    await withTimeout(setDoc(doc(db, 'companyInfo', 'import-' + t.id), { json }), 15000);
+    t.meta = { ...t.meta, statut, created: d.created || 0, updated: d.updated || 0, stocks: (d.changements || []).filter(x => x[1] === 'quantiteRestante').length, ok: d.ok || 0, nbFichiers: d.nbFichiers || 0 };
+    await withTimeout(indexImport(t.id, t.meta), 15000);
+    if(!$('io-log-panel').classList.contains('hidden')) renderImportLog();
+    return true;
+  } catch(err){ console.warn("Détail de l'import non enregistré", err); return false; }
+}
+async function logImport(d){ return finImport(await archiveImport({ type: d.type }, null), 'termine', d); }   // import de photos : sans fichier
 async function renderImportLog(){
   const box = $('io-log-list');
   box.textContent = 'Chargement…';
   try{
-    const snap = await getDocs(query(collection(db, 'importLog'), orderBy('date', 'desc')));
-    const rows = snap.docs.map(d => d.data()).slice(0, 50);
-    if(rows.length === 0){ box.textContent = 'Aucun import enregistré pour le moment.'; return; }
-    box.innerHTML = rows.map(r => {
-      const when = escHtml(fmtDateHeure(r.date));
-      let head, body = '';
-      if(r.type === 'photos'){
-        head = `📷 Photos — ${r.ok || 0} rattachée(s) sur ${r.nbFichiers || 0} fichier(s)`;
-        if(r.rattaches && r.rattaches.length) body += `<div><strong>Rattachées :</strong> ${escHtml(r.rattaches.join(', '))}</div>`;
-        if(r.noMatch && r.noMatch.length) body += `<div><strong>Sans article :</strong> ${escHtml(r.noMatch.join(', '))}</div>`;
-        if(r.failed && r.failed.length) body += `<div><strong>Illisibles :</strong> ${escHtml(r.failed.join(', '))}</div>`;
-      } else {
-        head = `📄 Excel « ${escHtml(r.fichier || '')} » — ${r.created || 0} créé(s), ${r.updated || 0} mis à jour`;
-        if(r.creations) body += `<div>Importé comme <strong>créations Faberhaus</strong>.</div>`;
-        if(r.createdCodes && r.createdCodes.length) body += `<div><strong>Créés :</strong> ${escHtml(r.createdCodes.join(', '))}</div>`;
-        if(r.updatedCodes && r.updatedCodes.length) body += `<div><strong>Mis à jour :</strong> ${escHtml(r.updatedCodes.join(', '))}</div>`;
-        const ign = [];
-        if(r.skippedDup) ign.push(`${r.skippedDup} déjà présent(s)`);
-        if(r.skippedNoMatch) ign.push(`${r.skippedNoMatch} sans code correspondant`);
-        if(r.skippedNoChange) ign.push(`${r.skippedNoChange} sans changement`);
-        if(r.badTypes && r.badTypes.length) ign.push(`catégorie inconnue : ${r.badTypes.join(', ')}`);
-        if(ign.length) body += `<div><strong>Ignorés :</strong> ${escHtml(ign.join(' · '))}</div>`;
-      }
-      return `<details class="io-log-item"><summary><span class="io-log-when">${when}</span> ${head}</summary><div class="io-log-body">${body || '—'}</div></details>`;
+    const snap = await getDoc(doc(db, 'companyInfo', 'imports'));
+    const rows = Object.entries(snap.exists() ? snap.data() : {}).map(([id, r]) => ({ id, ...r })).sort((a, b) => b.date - a.date);
+    if(rows.length === 0){ box.textContent = "Aucun import archivé pour le moment. Les imports faits avant la version 35.73 n'ont pas été gardés."; return; }
+    box.innerHTML = rows.slice(0, 200).map(r => {
+      const etat = r.statut === 'interrompu' ? ' · <b>interrompu</b>' : r.statut === 'encours' ? ' · <b>non terminé</b>' : '';
+      const head = r.type === 'photos' ? `Photos — ${r.ok || 0} rattachée(s) sur ${r.nbFichiers || 0}`
+        : `${r.type === 'textes' ? 'Textes' : 'Excel'} « ${escHtml(r.fichier || '')} » — ${r.created || 0} créé(s), ${r.updated || 0} mis à jour${r.stocks ? `, <b>${r.stocks} stock(s) changé(s)</b>` : ''}`;
+      return `<details class="io-log-item" data-imp="${escHtml(r.id)}" data-n="${Number(r.morceaux) || 0}" data-nom="${escHtml(r.fichier || 'import.xlsx')}"><summary><span class="io-log-when">${escHtml(fmtDateHeure(r.date))}</span> ${head}${etat}</summary><div class="io-log-body"></div></details>`;
     }).join('');
+    box.querySelectorAll('details').forEach(el => el.addEventListener('toggle', () => { if(el.open && !el.dataset.lu){ el.dataset.lu = '1'; detailImport(el); } }));
   }catch(err){
-    box.textContent = "Impossible de lire l'historique : " + err.message;
+    box.textContent = "Historique illisible : " + err.message;
   }
+}
+async function detailImport(el){
+  const body = el.querySelector('.io-log-body');
+  const bouton = Number(el.dataset.n) ? '<button type="button" class="btn-discrete" data-dl>Télécharger le fichier importé</button>' : '';
+  body.textContent = 'Chargement…';
+  try{
+    const sn = await getDoc(doc(db, 'companyInfo', 'import-' + el.dataset.imp));
+    const r = sn.exists() ? JSON.parse(sn.data().json) : null;
+    let h = bouton;
+    if(!r) h += "<div>Le détail n'a pas été enregistré (import non terminé).</div>";
+    else {
+      const L = r.changements || [], st = L.filter(x => STOCK_CHAMPS.includes(x[1])), au = L.filter(x => !STOCK_CHAMPS.includes(x[1]));
+      const liste = (t, L2) => L2 && L2.length ? `<div><strong>${t} :</strong> ${escHtml(L2.join(', '))}</div>` : '';
+      if(r.erreur) h += `<div><strong>Interrompu :</strong> ${escHtml(r.erreur)}</div>`;
+      if(r.creations) h += '<div>Importé comme <strong>créations Faberhaus</strong>.</div>';
+      if(st.length) h += `<div><strong>Stocks remplacés (avant → après) :</strong></div><div class="io-stock-liste">${lignesStock(st)}</div>`;
+      if(r.stocksGardes && r.stocksGardes.length) h += `<div><strong>Stocks du fichier ignorés (appli → fichier) :</strong></div><div class="io-stock-liste">${lignesStock(r.stocksGardes)}</div>`;
+      h += liste('Créés', r.createdCodes) + liste('Mis à jour', r.updatedCodes) + liste('Rattachées', r.rattaches) + liste('Sans article', r.noMatch) + liste('Illisibles', r.failed);
+      if(au.length) h += `<details><summary>Autres changements (${(r.changementsTotal || L.length) - st.length})</summary><div class="io-stock-liste">${au.slice(0, 400).map(x => `<div class="io-stock-l" style="display:block;"><b>${escHtml(x[0])}</b> · ${escHtml(libelleChamp(x[1]))} : ${escHtml(String(x[2] ?? '—'))} → ${escHtml(String(x[3] ?? '—'))}</div>`).join('')}</div></details>`;
+      const ign = [];
+      if(r.skippedDup) ign.push(`${r.skippedDup} déjà présent(s)`);
+      if(r.skippedNoMatch) ign.push(`${r.skippedNoMatch} sans code correspondant`);
+      if(r.skippedNoChange) ign.push(`${r.skippedNoChange} sans changement`);
+      if(r.badTypes && r.badTypes.length) ign.push(`catégorie inconnue : ${r.badTypes.join(', ')}`);
+      if(ign.length) h += `<div><strong>Ignorés :</strong> ${escHtml(ign.join(' · '))}</div>`;
+    }
+    body.innerHTML = h || '—';
+    const b = body.querySelector('[data-dl]');
+    if(b) b.addEventListener('click', () => telechargeImport(el, b));
+  } catch(err){ el.dataset.lu = ''; body.textContent = 'Détail illisible : ' + err.message; }
+}
+async function telechargeImport(el, b){
+  b.disabled = true;
+  try{
+    let b64 = '';
+    for(let i = 0; i < Number(el.dataset.n); i++){
+      const sn = await getDoc(doc(db, 'companyInfo', `import-${el.dataset.imp}-${i}`));
+      if(!sn.exists()) throw new Error('fichier incomplet');
+      b64 += sn.data().b64;
+    }
+    const bin = atob(b64), o = new Uint8Array(bin.length);
+    for(let i = 0; i < bin.length; i++) o[i] = bin.charCodeAt(i);
+    downloadBlob(new Blob([o], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), el.dataset.nom);
+  } catch(err){ alert('Téléchargement impossible : ' + err.message); }
+  finally{ b.disabled = false; }
 }
 $('io-log-toggle').addEventListener('click', () => {
   const panel = $('io-log-panel');
   const open = panel.classList.toggle('hidden') === false;
-  $('io-log-toggle').textContent = open ? "Masquer l'historique des imports" : "Historique des imports";
+  $('io-log-toggle').textContent = open ? 'Masquer les imports' : 'Voir les imports';
   if(open) renderImportLog();
 });
 
@@ -15084,7 +15322,7 @@ function runStockcalc(){
     return;
   }
 
-  const qte = Math.floor(poidsTotal / poidsUnitaire);
+  const qte = Math.floor(poidsTotal / poidsUnitaire + 1e-6);
   const reste = Math.round((poidsTotal - qte * poidsUnitaire) * 100) / 100;
 
   $('stockcalc-result-value').textContent = `${qte} pièce(s)`;
@@ -15119,16 +15357,16 @@ $('stockcalc-update-btn').addEventListener('click', async ()=>{
   const poidsUnitaire = parseNum($('stockcalc-poids-unitaire').value);
   const poidsTotal = parseNum($('stockcalc-poids-total').value);
   if(isNaN(poidsUnitaire) || poidsUnitaire <= 0 || isNaN(poidsTotal) || poidsTotal <= 0) return;
-  const qte = Math.floor(poidsTotal / poidsUnitaire);
+  const qte = Math.floor(poidsTotal / poidsUnitaire + 1e-6);
 
   const btn = $('stockcalc-update-btn');
   const ok = await saveWithFeedback(btn, async ()=>{
-    await updateDoc(doc(db, COL, id), {
-      poids: poidsUnitaire,
-      quantiteRestante: qte,
-      updatedAt: Date.now(),
+    await runTransaction(db, async tx => {
+      const ref = doc(db, COL, id), sn = await tx.get(ref);
+      if(!sn.exists()) throw erreurDefinitive("Cet article n'existe plus.");
+      tx.update(ref, { poids: poidsUnitaire, ...champsStock(sn.data(), qte) });
     });
-    await loadMateriaux();
+    await rechargeApres();
   });
   if(ok){
     $('stockcalc-success').textContent = `Stock mis à jour : ${qte} pièce(s) pour ${cleanName(a.nomCourt) || a.composition}.`;
