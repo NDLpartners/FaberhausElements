@@ -549,6 +549,62 @@ button.btn-danger:hover{background:var(--error);color:#fff;}
   overflow:hidden;box-shadow:none;
 }
 .item-card .info{flex:1;min-width:0;}
+.aud-resume{border:1px solid #000;padding:12px;margin-top:10px;font-size:13.5px;}
+.aud-resume>b{font-weight:500;}
+.aud-barre{display:block;height:4px;background:#E5E5E5;margin:8px 0;}
+.aud-barre i{display:block;height:100%;background:#23408F;}
+.aud-chiffres{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;}
+.aud-chiffres b,.aud-resume .hint b{font-weight:500;}
+.aud-liste{margin-top:14px;}
+.aud-box{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:0 12px;align-items:baseline;padding:13px 0 6px;border-bottom:1px solid var(--stone);}
+.aud-box:focus-visible,.aud-lien:focus-visible,.aud-l:focus-visible{outline:2px solid #000;outline-offset:1px;}
+.aud-box-nom{font-size:15.5px;font-weight:500;}
+.aud-box-etat{font-size:13px;color:#595959;}
+.aud-box .aud-barre{grid-column:1/-1;margin:8px 0 2px;}
+.aud-haut{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;}
+.aud-haut b{font-weight:500;}
+.aud-lien{all:unset;cursor:pointer;color:#23408F;font-size:13.5px;padding:8px 0;min-width:72px;}
+.aud-haut .aud-lien:last-child{text-align:right;}
+.aud-art{display:flex;gap:12px;align-items:center;margin:8px 0;}
+.aud-txt{flex:1;min-width:0;}
+.aud-ancien{flex:none;text-align:center;border:1px solid #000;padding:5px 12px 6px;line-height:1.15;}
+.aud-ancien span{display:block;font-size:11.5px;color:#595959;}
+.aud-ancien b{font-size:24px;font-weight:500;white-space:nowrap;}
+.aud-art img{width:58px;height:58px;object-fit:cover;flex:none;border-radius:2px;}
+.aud-ligne1{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.aud-ligne1 b{font-size:22px;font-weight:500;}
+#aud-nom{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#aud-detail{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#aud-detail:empty{display:none;}
+.aud-etat{font-size:12.5px;border-left:3px solid #23408F;padding:3px 9px;margin-bottom:8px;}
+.aud-modes{display:flex;gap:8px;margin-bottom:8px;}
+.aud-champs{display:flex;gap:8px;}
+.aud-champs>div{flex:1;min-width:0;}
+.aud-champs label,#aud-compter label{margin:0 0 4px;font-size:12px;white-space:nowrap;}
+#view-audit-pesee .aud-champs input,#aud-compte{font-size:18px;text-align:center;padding-left:4px;padding-right:4px;width:100%;box-sizing:border-box;}
+.aud-recents{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:#595959;margin-top:6px;}
+.aud-recents:empty{display:none;}
+.aud-resultat{text-align:center;padding:9px 0 10px;min-height:66px;}
+#aud-res{font-size:27px;font-weight:500;color:#23408F;line-height:1.15;}
+#aud-res-d{font-size:12.5px;color:#595959;line-height:1.4;}
+#aud-res-d b{font-weight:500;color:#000;}
+#aud-res-d.aud-alerte{color:#B00020;}
+.aud-deux{display:flex;gap:8px;margin-top:8px;}
+.aud-deux>div{flex:1;text-align:center;}
+.aud-deux .btn{width:100%;}
+.aud-deux small{font-size:11.5px;color:#595959;}
+.aud-liste-l{border:1px solid #000;max-height:300px;overflow:auto;margin:8px 0;}
+.aud-l{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:10px;padding:9px 10px;border-bottom:1px solid var(--stone);font-size:13px;}
+.aud-l.ici{background:#E8ECF6;}
+.aud-l b{font-weight:500;flex:none;min-width:52px;}
+.aud-l span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.aud-l em{font-style:normal;flex:none;color:#23408F;font-variant-numeric:tabular-nums;}
+.aud-r{padding:9px 0;border-bottom:1px solid var(--stone);font-size:13.5px;}
+.aud-r>div:first-child{display:flex;gap:8px;}
+.aud-r b{font-weight:500;}
+.aud-r-e{margin-left:auto;font-weight:500;white-space:nowrap;}
+body.aud-en-cours main{padding-top:4px !important;}
+body.aud-en-cours .finder-fab,body.aud-en-cours .scroll-top-btn{display:none !important;}
 .io-stock{margin-top:12px;border:1px solid #000;padding:12px;font-size:13px;line-height:1.45;}
 .io-stock-liste{max-height:220px;overflow:auto;margin:8px 0 10px;border-top:1px solid var(--stone);}
 .io-stock-l{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--stone);font-size:12.5px;}
@@ -1945,6 +2001,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
             <div class="desc">Compte les pièces par pesée</div>
           </div>
         </button>
+        <button class="home-utility" data-nav="audit" style="margin-bottom:10px;">
+          <div class="home-utility-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><polyline points="9 13 11.2 15.2 15.5 10.8"/></svg>
+          </div>
+          <div class="home-utility-text">
+            <div class="label">Audit de l'inventaire</div>
+            <div class="desc">Recomptage box par box</div>
+          </div>
+        </button>
         <button class="home-utility" data-nav="localiser" style="margin-bottom:10px;">
           <div class="home-utility-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -3144,6 +3209,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
       <div class="form-title-block">
         <h1 id="box-detail-title">Box</h1>
       </div>
+      <button type="button" class="btn btn-primary" id="box-detail-audit" style="width:100%;margin-bottom:14px;">Auditer cette box</button>
       <label>Renommer cette box</label>
       <div class="field-row">
         <div><input type="text" id="box-detail-rename"></div>
@@ -3474,6 +3540,49 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
       <button type="button" class="btn btn-primary" id="stockcalc-update-btn" disabled style="margin-top:20px;width:100%;">Mettre à jour le stock</button>
       <div id="stockcalc-success" class="success-msg hidden" style="margin-top:14px;"></div>
       <button type="button" class="btn-fullwidth-ghost" id="stockcalc-reset-btn" style="margin-top:10px;">↺ Remettre à zéro</button>
+    </section>
+
+    <!-- ---------- AUDIT DU STOCK ---------- -->
+    <section id="view-audit" class="hidden">
+      <h1 style="margin-bottom:6px;">Audit de l'inventaire</h1>
+      <div class="hint" style="margin-top:0;margin-bottom:14px;">Choisis une storage box : l'appli propose chaque numéro, l'un après l'autre.</div>
+      <div id="audit-body"></div>
+    </section>
+    <section id="view-audit-pesee" class="hidden">
+      <div id="aud-carte">
+        <div class="aud-haut"><button type="button" class="aud-lien" id="aud-prec">‹ Précédent</button><b id="aud-tete"></b><button type="button" class="aud-lien" id="aud-liste-btn">Liste</button></div>
+        <div class="aud-barre"><i id="aud-progres"></i></div>
+        <div id="aud-liste" class="aud-liste-l hidden"></div>
+        <div class="aud-art"><img id="aud-photo" alt="" class="hidden"><div class="aud-txt"><div class="aud-ligne1"><b id="aud-code"></b></div><div id="aud-nom"></div><div id="aud-detail" class="hint"></div></div><div class="aud-ancien"><span>Ancien stock</span><b id="aud-stock"></b></div></div>
+        <div id="aud-etat" class="aud-etat hidden"></div>
+        <div class="aud-modes"><button type="button" class="filter-chip active" id="aud-m-peser">Peser</button><button type="button" class="filter-chip" id="aud-m-compter">Compter</button></div>
+        <div id="aud-peser">
+          <div class="aud-champs">
+            <div><label for="aud-total">Total (g)</label><input type="text" inputmode="decimal" autocomplete="off" id="aud-total"></div>
+            <div><label for="aud-cont">Boîte vide (g)</label><input type="text" inputmode="decimal" autocomplete="off" id="aud-cont"></div>
+            <div><label for="aud-uni" id="aud-uni-label">1 élément (g)</label><input type="text" inputmode="decimal" autocomplete="off" id="aud-uni"></div>
+          </div>
+          <div id="aud-recents" class="aud-recents"></div>
+        </div>
+        <div id="aud-compter" class="hidden"><label for="aud-compte">Nombre compté</label><input type="text" inputmode="decimal" autocomplete="off" id="aud-compte"></div>
+        <div class="aud-resultat"><div id="aud-res">—</div><div id="aud-res-d"></div></div>
+        <div id="aud-err" class="error-msg hidden"></div>
+        <button type="button" class="btn btn-primary" id="aud-ok" style="width:100%;" disabled>Mettre à jour et suivant</button>
+        <div class="aud-deux"><div><button type="button" class="btn" id="aud-passer">Passer</button><small>Ancien stock juste, gardé</small></div><div><button type="button" class="btn" id="aud-doute">Pas sûr</button><small>À revoir plus tard</small></div></div>
+        <button type="button" class="aud-lien" id="aud-ech-btn" style="margin-top:12px;">Peser un échantillon</button>
+        <div id="aud-ech" class="hidden">
+          <div class="hint">Pèse plusieurs éléments ensemble, sans boîte : l'appli en déduit le poids d'un seul et le garde dans la fiche.</div>
+          <div class="aud-champs"><div><label for="aud-ech-nb" id="aud-ech-nb-label">Nombre de pièces</label><input type="text" inputmode="decimal" autocomplete="off" id="aud-ech-nb"></div><div><label for="aud-ech-poids">Poids ensemble (g)</label><input type="text" inputmode="decimal" autocomplete="off" id="aud-ech-poids"></div></div>
+        </div>
+        <label for="aud-note" style="margin-top:14px;">Note pour le rapport (facultatif)</label>
+        <input type="text" id="aud-note" maxlength="160" autocomplete="off">
+        <div class="hint">« Passer » et « Pas sûr » ne changent pas le stock et sont consignés dans le rapport.</div>
+      </div>
+      <div id="aud-fin" class="hidden"></div>
+    </section>
+    <section id="view-audit-rapport" class="hidden">
+      <h1 style="margin-bottom:6px;">Rapport d'audit</h1>
+      <div id="audit-rapport-body"></div>
     </section>
 
     <!-- ---------- LOCALISER DES PRODUITS ---------- -->
@@ -4321,7 +4430,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.73 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.74 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -4609,7 +4718,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 /* ---------- Navigation ---------- */
-const VIEWS = ['home','inventaire','inventaire-form','produit','etsy','vente','historique','vente-form','boxes','box-detail','ameliorations','description','reception','reappro','promotion','promotion-form','changelog','entreprise','mdv','boutiques','ioexport','bonneaffaire','reperages','stockcalc','localiser','publier','nouvel-encodage','repertoire','repertoire-form','recherche','prixpublic','creation','semaine','semaines','analyse','reservations'];
+const VIEWS = ['home','inventaire','inventaire-form','produit','etsy','vente','historique','vente-form','boxes','box-detail','ameliorations','description','reception','reappro','promotion','promotion-form','changelog','entreprise','mdv','boutiques','ioexport','bonneaffaire','reperages','stockcalc','localiser','publier','nouvel-encodage','repertoire','repertoire-form','recherche','prixpublic','creation','semaine','semaines','analyse','reservations','audit','audit-pesee','audit-rapport'];
 const CRUMBS = {
   'home':'Accueil', 'inventaire':'Inventaire général', 'inventaire-form':'Fiche article',
   'produit':'Afficher un produit', 'etsy':'Calculateur Retail', 'vente':'Nouvelle vente',
@@ -4621,7 +4730,7 @@ const CRUMBS = {
   'ioexport':'Import / Export', 'bonneaffaire':'Bonne affaire ?', 'reperages':'Mes repérages',
   'stockcalc':'Calculateur de stock', 'localiser':'Localiser des produits', 'publier':'Suggestion de vente',
   'nouvel-encodage':'Nouvel encodage', 'repertoire':'Répertoire et adresses', 'repertoire-form':'Fiche contact',
-  'recherche':'Rechercher un produit', 'prixpublic':'Prix public', 'creation':'Nouvelle création', 'semaine':'Performance des ventes', 'semaines':'Semaine après semaine', 'analyse':'Analyse et export', 'reservations':'Réserve Vinted'
+  'recherche':'Rechercher un produit', 'prixpublic':'Prix public', 'creation':'Nouvelle création', 'semaine':'Performance des ventes', 'semaines':'Semaine après semaine', 'analyse':'Analyse et export', 'reservations':'Réserve Vinted', 'audit':"Audit de l'inventaire", 'audit-pesee':'Pesée', 'audit-rapport':"Rapport d'audit"
 };
 let navStack = [];
 
@@ -4661,6 +4770,9 @@ function navigate(name, opts){
   if(name === 'semaines') renderSemaines();
   if(name === 'analyse') renderAnalyse();
   if(name === 'reservations'){ rsvShown = 30; rsvSelMode = false; rsvSel.clear(); renderReservations(); }
+  document.body.classList.toggle('aud-en-cours', name === 'audit-pesee');
+  if(name === 'audit') renderAudit();
+  if(name === 'audit-pesee' && opts.isBack) audMontre(true);
   if(name === 'boxes') renderBoxesList();
   if(name === 'ameliorations') renderAmeliorations();
   if(name === 'description') renderDescriptionSelect();
@@ -10018,7 +10130,7 @@ function preOuvre(){
   if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.73'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.74'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -12757,6 +12869,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'35.74', items:["Audit de l'inventaire (Plus d'options, ou depuis une storage box) : recomptage par pesée, box par box, numéro après numéro. Poids de la boîte vide gardé par box, échantillon pour les petits éléments, comptage à la main possible. L'ancien stock est affiché à chaque référence : s'il semble juste, « Passer » le garde. « Pas sûr » met l'article à revoir. Rapport, historique et export en tableau."] },
   { v:'35.73', items:["Stock : ventes, réappros, créations, suppressions de vente et pesées relisent le stock réel avant d'écrire et ne peuvent plus compter deux fois quand la connexion est lente.","Fiche produit : le stock n'est enregistré que s'il a été modifié ; avertissement s'il a changé ailleurs entre-temps. Une création garde son code FH.","Réserve Vinted : ne dépasse plus jamais le stock ; l'avertissement de vente Vinted tient compte des articles « Vinted seul ».","Import Excel : l'appli montre les stocks qui changeraient et garde les siens par défaut. Chaque fichier importé est archivé (date, changements avant → après, téléchargement) dans « Excel importés »."] },
   { v:'35.72', items:["Le Pré de Caramel : des papiers peuvent traîner dans le jardin de la maison. Une fois trouvés, Emile vient les contrôler.","Le Pré de Caramel : musique de fond douce, « L'as-tu vu » le jour et « Plaisir d'amour » le soir (bouton SON).","Le Pré de Caramel : les trouvailles apparaissent au hasard dans tout le pré. Emile vient toutes les 4 minutes, et le soir a sa propre phrase d'accueil.","Correctif : dans Le Pré de Caramel, Emile restait bloqué en arrivant et l'ordre des produits pouvait se décaler."] },
   { v:'35.71', items:["Le Pré de Caramel : quand on quitte puis rouvre le jeu, Florence reprend devant la maison.","Nouvel encodage : une carte « Réserve Vinted » ouvre directement Le Pré de Caramel.","Réserve Vinted : le bouton « Jouer » est moins haut et porte une icône de manette d'arcade."] },
@@ -15282,6 +15395,330 @@ $('io-photos-file').addEventListener('change', async (e)=>{
   out.textContent = `${ok} photo(s) rattachée(s).` +
     (noMatch.length ? ` ${noMatch.length} sans article correspondant dans la colonne « Photo (nom du fichier) » : ${noMatch.slice(0,8).join(', ')}${noMatch.length > 8 ? '…' : ''}.` : '') +
     (failed.length ? ` Illisible(s) : ${failed.join(', ')}.` : '');
+});
+
+/* ==================================================================
+   AUDIT DU STOCK (recomptage par pesée, storage box par storage box)
+   companyInfo/audits : la liste des audits + poids des boîtes vides (_contenants, par storage box)
+   companyInfo/audit-<id>-<0 à 15> : une ligne (texte JSON) par article vérifié, passé ou incertain, réparties en 16 documents
+   companyInfo/audit-<id> : les articles non vérifiés au moment de terminer
+   Stock compté = (poids total − boîte vide) ÷ poids d'un élément
+   ================================================================== */
+const AUD_SANS = 'sans-box', AUD_BALANCE = .01;   // précision supposée de la balance : 0,01 g
+const AUD_ST = { ok: 'Vérifié', passe: 'Passé, stock gardé', doute: 'Pas sûr' };
+let aud = { liste: {}, contenants: {}, id: null, lignes: {}, charge: false };
+let audS = { box: null, file: [], i: 0, revoir: false, mode: 'peser', op: null, sens: null, recents: {} };
+const audNum = v => v === null || v === undefined ? '' : String(Math.round(v * 1e5) / 1e5).replace('.', ',');
+const audBoxNom = k => k === AUD_SANS ? 'Sans storage box' : (storageBoxes.find(b => b.id === k) || {}).nom || 'Box supprimée';
+const audBoxDe = a => storageBoxes.some(b => b.id === a.storageBoxId) ? a.storageBoxId : AUD_SANS;
+const audBoxes = () => [...storageBoxes.slice().sort((x, y) => x.nom.localeCompare(y.nom, 'fr', { numeric: true })).map(b => b.id), AUD_SANS];
+const audArticles = k => activeMateriaux().filter(a => k === null || audBoxDe(a) === k).sort((x, y) => (x.numero ?? 1e9) - (y.numero ?? 1e9));
+const audActuel = () => materiaux.find(a => a.id === audS.file[audS.i]) || null;
+const audUnite = a => a && a.venduALaLongueur ? 'mm' : 'pièce(s)';
+// Écart total d'une ligne, essais précédents compris
+function audEcart(l){ return arrondiStock([...(l.prev || []), l].filter(x => x.s === 'ok').reduce((t, x) => t + (x.ap - x.av), 0)); }
+function audAvant(l){ const p = [...(l.prev || []), l].find(x => x.s === 'ok'); return p ? p.av : l.av; }
+
+async function audCharge(){
+  const sn = await withTimeout(getDoc(doc(db, 'companyInfo', 'audits')), 12000);
+  const d = sn.exists() ? sn.data() : {};
+  aud.contenants = d._contenants || {};
+  aud.liste = Object.fromEntries(Object.entries(d).filter(([k]) => k !== '_contenants'));
+  const ouvert = Object.entries(aud.liste).filter(([, m]) => m.statut === 'encours').sort((x, y) => y[1].debut - x[1].debut)[0];
+  aud.id = ouvert ? ouvert[0] : null;
+  aud.lignes = aud.id ? await audLignes(aud.id) : {};
+  aud.charge = true;
+}
+const audDoc = (id, art) => { let h = 0; for(const c of art) h = (h * 31 + c.charCodeAt(0)) % 16; return doc(db, 'companyInfo', `audit-${id}-${h}`); };
+async function audLignes(id){
+  const L = {}, S = await withTimeout(Promise.all(Array.from({ length: 16 }, (_, i) => getDoc(doc(db, 'companyInfo', `audit-${id}-${i}`)))), 20000);
+  S.forEach(sn => Object.entries(sn.exists() ? sn.data() : {}).forEach(([k, v]) => { try{ L[k] = JSON.parse(v); } catch(_){} }));
+  return L;
+}
+function audBilan(L, articles){
+  const r = { total: articles.length, ok: 0, passe: 0, doute: 0, corriges: 0, ecart: 0, valeur: 0 };
+  articles.forEach(a => { const l = L[a.id]; if(!l) return; r[l.s]++; const e = audEcart(l); if(e){ r.corriges++; r.ecart += e; r.valeur += e * (l.pu || 0); } });
+  r.reste = r.total - r.ok - r.passe - r.doute;
+  return r;
+}
+
+/* ---------- Écran d'accueil de l'audit ---------- */
+async function renderAudit(){
+  const el = $('audit-body');
+  el.innerHTML = '<div class="hint">Chargement…</div>';
+  try{ await audCharge(); } catch(e){ el.innerHTML = `<div class="error-msg">Audit illisible : ${escHtml(e.message === 'TIMEOUT' ? 'connexion trop lente' : e.message)}</div><button type="button" class="btn" data-aud="recharge" style="width:100%;margin-top:10px;">Réessayer</button>`; return; }
+  const T = audBilan(aud.lignes, audArticles(null)), m = aud.id ? aud.liste[aud.id] : null;
+  const finis = Object.entries(aud.liste).filter(([, x]) => x.statut === 'termine').sort((x, y) => y[1].fin - x[1].fin);
+  el.innerHTML = (m ? `
+    <div class="aud-resume"><b>Audit commencé le ${escHtml(fmtDateHeure(m.debut))}</b>
+      <div class="aud-barre"><i style="width:${T.total ? (T.total - T.reste) / T.total * 100 : 0}%"></i></div>
+      <div class="aud-chiffres"><span><b>${T.ok}</b> vérifiés</span><span><b>${T.corriges}</b> corrigés</span><span><b>${T.passe}</b> passé${T.passe > 1 ? 's' : ''}</span><span><b>${T.doute}</b> pas sûrs</span><span><b>${T.reste}</b> restants</span></div></div>
+    ${T.doute ? `<button type="button" class="btn" data-aud="revoir" style="width:100%;margin-top:10px;">Reprendre les pas sûrs (${T.doute})</button>` : ''}
+    <div class="aud-liste">${audBoxes().map(k => { const L = audArticles(k); if(!L.length) return ''; const b = audBilan(aud.lignes, L), fait = b.total - b.reste;
+      return `<button type="button" class="aud-box" data-aud-box="${escHtml(k)}"><span class="aud-box-nom">${escHtml(audBoxNom(k))}</span><span class="aud-box-etat">${b.doute ? `${b.doute} à revoir · ` : ''}${fait} / ${b.total}${b.reste ? '' : ' ✓'}</span><span class="aud-barre"><i style="width:${fait / b.total * 100}%"></i></span></button>`; }).join('')}</div>
+    <div class="btn-row" style="margin-top:14px;"><button type="button" class="btn" data-aud="rapport" style="flex:1;">Rapport</button><button type="button" class="btn" data-aud="finir" style="flex:1;">Terminer l'audit</button></div>`
+    : `<button type="button" class="btn btn-primary" data-aud="debut" style="width:100%;margin-top:6px;">Commencer un audit</button>`)
+    + (finis.length ? `<div class="form-section-title" style="margin-top:26px;">Audits précédents</div>${finis.map(([id, x]) => `<button type="button" class="aud-box" data-aud-hist="${escHtml(id)}"><span class="aud-box-nom">${escHtml(fmtDateHeure(x.fin))}</span><span class="aud-box-etat">${x.ok || 0} vérifiés · ${x.corriges || 0} corrigés${x.passe ? ` · ${x.passe} gardé${x.passe > 1 ? 's' : ''}` : ''}${x.doute ? ` · ${x.doute} à revoir` : ''}</span></button>`).join('')}` : '');
+}
+$('audit-body').addEventListener('click', async e => {
+  const b = e.target.closest('[data-aud-box]'); if(b) return audOuvreBox(b.dataset.audBox);
+  const h = e.target.closest('[data-aud-hist]'); if(h) return audRapport(h.dataset.audHist);
+  const x = e.target.closest('[data-aud]'); if(!x) return;
+  if(x.dataset.aud === 'recharge') renderAudit();
+  else if(x.dataset.aud === 'debut') await audCommence(x);
+  else if(x.dataset.aud === 'rapport') audRapport(aud.id);
+  else if(x.dataset.aud === 'revoir') audLance(null, audArticles(null).filter(a => aud.lignes[a.id] && aud.lignes[a.id].s === 'doute').sort((p, q) => audBoxes().indexOf(audBoxDe(p)) - audBoxes().indexOf(audBoxDe(q)) || p.numero - q.numero).map(a => a.id), true);
+  else if(x.dataset.aud === 'finir') await audTermine(x);
+});
+async function audCommence(btn){
+  const id = 'a' + Date.now().toString(36), m = { debut: Date.now(), statut: 'encours' };
+  const ok = await saveWithFeedback(btn, () => setDoc(doc(db, 'companyInfo', 'audits'), { [id]: m }, { merge: true }));
+  if(ok){ aud.id = id; aud.liste[id] = m; aud.lignes = {}; await renderAudit(); }
+  return ok;
+}
+async function audTermine(btn){
+  aud.lignes = await audLignes(aud.id).catch(() => aud.lignes);
+  const L = audArticles(null), T = audBilan(aud.lignes, L);
+  if(!confirm(`Terminer l'audit ?\n${T.ok} vérifiés, ${T.passe} passés (stock gardé), ${T.doute} pas sûrs, ${T.reste} non vérifiés.\nTout reste consultable dans « Audits précédents ».`)) return;
+  const id = aud.id, m = { ...aud.liste[id], statut: 'termine', fin: Date.now(), total: T.total, ok: T.ok, passe: T.passe, doute: T.doute, corriges: T.corriges };
+  const restants = JSON.stringify(L.filter(a => !aud.lignes[a.id]).map(a => [a.codeProduit || '', (cleanName(a.nomCourt) || '').slice(0, 60), audBoxNom(audBoxDe(a)), a.quantiteRestante ?? 0]));
+  const ok = await saveWithFeedback(btn, async () => {
+    await setDoc(doc(db, 'companyInfo', 'audit-' + id), { _restants: restants }, { merge: true });
+    await setDoc(doc(db, 'companyInfo', 'audits'), { [id]: m }, { merge: true });
+  });
+  if(ok){ aud.liste[id] = m; aud.id = null; audRapport(id); }
+}
+
+/* ---------- Pesée ---------- */
+async function audOuvreBox(k){
+  try{ await withTimeout(loadMateriaux(), 12000); aud.lignes = await audLignes(aud.id); }
+  catch(e){ alert("Les stocks n'ont pas pu être relus. Vérifie ta connexion et réessaie."); return; }
+  const L = audArticles(k).map(a => a.id);
+  if(!L.length){ alert('Aucun article dans cette box.'); return; }
+  audLance(k, L, false);
+}
+function audLance(k, file, revoir){
+  if(!file.length) return;
+  audS = { ...audS, box: k, file, revoir, i: 0, mode: 'peser' };
+  if(!revoir){ const j = file.findIndex(id => !aud.lignes[id]); if(j < 0){ navigate('audit-pesee'); audFinBox(); return; } audS.i = j; }
+  navigate('audit-pesee'); audMontre(true);
+}
+const audCleBox = a => audS.box || audBoxDe(a);
+function audMontre(nouveau){
+  const a = audActuel(); if(!a) return audSuivant();
+  const l = aud.lignes[a.id], k = audCleBox(a), long = !!a.venduALaLongueur;
+  hide($('aud-fin')); show($('aud-carte'));
+  audS.op = null; audS.vu = a.quantiteRestante ?? 0;
+  const fait = audS.file.filter(id => aud.lignes[id]).length;
+  $('aud-tete').textContent = `${audBoxNom(k)} · ${audS.i + 1} / ${audS.file.length}`;
+  $('aud-progres').style.width = (audS.revoir ? audS.i : fait) / audS.file.length * 100 + '%';
+  $('aud-code').textContent = a.codeProduit || '—';
+  $('aud-nom').textContent = cleanName(a.nomCourt) || a.composition || '';
+  $('aud-detail').textContent = [a.dimension || (a.hauteur ? `${audNum(a.hauteur)} mm` : ''), a.materiau].filter(Boolean).join(' · ');
+  $('aud-stock').textContent = long ? fmtQty(a, audS.vu) : fmtNum(audS.vu, 2);
+  const ph = $('aud-photo'); ph.classList.toggle('hidden', !a.photo); if(a.photo) ph.src = a.photo; else ph.removeAttribute('src');
+  const et = $('aud-etat'); et.classList.toggle('hidden', !l); if(l) et.textContent = l.s === 'ok' ? `Déjà vérifié : ${fmtNum(l.ap, 2)} (le ${fmtDateHeure(l.t)})` : `${AUD_ST[l.s]} le ${fmtDateHeure(l.t)}${l.note ? ' : ' + l.note : ''}`;
+  $('aud-total').value = '';
+  const c = aud.contenants[k]; $('aud-cont').value = c === undefined || c === null ? '' : audNum(c);
+  $('aud-uni').value = long || !(a.poids > 0) ? '' : audNum(a.poids);
+  $('aud-uni-label').textContent = long ? '1 mètre (g)' : '1 élément (g)';
+  $('aud-ech-nb-label').textContent = long ? 'Longueur (mm)' : 'Nombre de pièces';
+  $('aud-compte').value = ''; $('aud-note').value = l && l.note || ''; $('aud-ech-nb').value = ''; $('aud-ech-poids').value = '';
+  audS.echNb = 0; hide($('aud-ech'));
+  audMode('peser'); audRecents(); audCalcule();
+  hide($('aud-err'));
+  if(nouveau) window.scrollTo(0, 0);
+  const f = $('aud-total'); f.focus({ preventScroll: true });
+}
+function audMode(m){
+  audS.mode = m;
+  $('aud-m-peser').classList.toggle('active', m === 'peser'); $('aud-m-compter').classList.toggle('active', m === 'compter');
+  $('aud-peser').classList.toggle('hidden', m !== 'peser'); $('aud-compter').classList.toggle('hidden', m !== 'compter');
+}
+// Poids de boîtes vides déjà utilisés : un appui pour en changer
+function audRecents(){
+  const a = audActuel(); if(!a) return;
+  const k = audCleBox(a), L = [...new Set([...(audS.recents[k] || []), aud.contenants[k]].filter(x => x !== undefined && x !== null))].slice(0, 4);
+  $('aud-recents').innerHTML = L.length > 1 ? 'Boîtes : ' + L.map(x => `<button type="button" class="filter-chip${audNum(x) === $('aud-cont').value ? ' active' : ''}" data-cont="${x}">${audNum(x)} g</button>`).join('') : '';
+}
+// Calcul : null si incomplet, { err } si impossible, sinon { q, brut, prec, … }
+function audLis(){
+  const a = audActuel(); if(!a) return null;
+  const long = !!a.venduALaLongueur;
+  if(audS.mode === 'compter'){
+    const q = parseNum($('aud-compte').value); if(isNaN(q)) return null;
+    if(q < 0) return { err: 'Le nombre ne peut pas être négatif.' };
+    if(!long && q % 1) return { err: 'Entre un nombre entier de pièces.' };
+    return { m: 'compte', q, brut: q, prec: 0, tot: null, cont: null, uni: null };
+  }
+  const tot = parseNum($('aud-total').value), cont = parseNum($('aud-cont').value), u0 = parseNum($('aud-uni').value);
+  if(isNaN(tot) || isNaN(cont) || isNaN(u0)) return null;
+  if(u0 <= 0) return { err: "Le poids d'un élément doit être supérieur à 0." };
+  if(tot < 0 || cont < 0) return { err: 'Un poids ne peut pas être négatif.' };
+  if(tot < cont - AUD_BALANCE) return { err: 'Le poids total est plus petit que la boîte vide.' };
+  const uni = long ? u0 / 1000 : u0, net = Math.max(0, tot - cont), brut = net / uni, q = Math.round(brut + 1e-9);
+  const dec = (String($('aud-uni').value).split(/[.,]/)[1] || '').length;
+  const flou = audS.echNb ? AUD_BALANCE / 2 / audS.echNb : .5 * Math.pow(10, -Math.max(dec, 2)) / (long ? 1000 : 1);
+  const prec = net <= 0 ? 0 : Math.round(AUD_BALANCE / uni + q * flou / uni);
+  return { m: 'pesee', q, brut: Math.round(brut * 1000) / 1000, prec, tot, cont, uni: u0, net: Math.round(net * 1e4) / 1e4 };
+}
+function audCalcule(){
+  const a = audActuel(), r = audLis(), v = $('aud-res'), d = $('aud-res-d');
+  $('aud-ok').disabled = !r || !!r.err;
+  d.classList.toggle('aud-alerte', !!(r && r.err));
+  if(!r || r.err){
+    v.textContent = '—';
+    d.textContent = r ? r.err : audS.mode === 'compter' ? 'Entre le nombre compté.' : isNaN(parseNum($('aud-cont').value)) ? 'Indique le poids de la boîte vide (0 si la balance est déjà à zéro avec la boîte).' : isNaN(parseNum($('aud-uni').value)) ? "Poids inconnu : entre-le, ou touche « Peser un échantillon »." : 'Entre le poids total.';
+    return;
+  }
+  const e = arrondiStock(r.q - audS.vu), gros = Math.abs(e) >= Math.max(5, audS.vu * .3);
+  v.textContent = a.venduALaLongueur ? fmtQty(a, r.q) : `${fmtNum(r.q, 0)} pièce${r.q > 1 ? 's' : ''}`;
+  d.innerHTML = `<b>${e === 0 ? 'Identique au stock' : `Écart : ${e > 0 ? '+' : '−'}${fmtNum(Math.abs(e), 2)}`}</b>${gros ? ' · gros écart, à vérifier' : ''}`
+    + (r.m === 'pesee' ? ` · calcul exact ${fmtNum(r.brut, 2)}` : '')
+    + (r.prec >= 1 ? `<br>Précision : environ ± ${fmtNum(r.prec, 0)}${a.venduALaLongueur ? ' mm' : ". Pour mieux, pèse un échantillon de 10 pièces ou plus."}` : !a.venduALaLongueur && r.m === 'pesee' && Math.abs(r.brut - r.q) > .25 ? '<br>Le calcul ne tombe pas rond : vérifie les poids.' : '');
+}
+['aud-total', 'aud-cont', 'aud-uni', 'aud-compte'].forEach(id => $(id).addEventListener('input', () => { if(id === 'aud-uni') audS.echNb = 0; if(id === 'aud-cont') audRecents(); audCalcule(); }));
+['aud-ech-nb', 'aud-ech-poids'].forEach(id => $(id).addEventListener('input', () => {
+  const a = audActuel(), n = parseNum($('aud-ech-nb').value), p = parseNum($('aud-ech-poids').value);
+  if(!a || !(n > 0) || !(p > 0)) return;
+  audS.echNb = a.venduALaLongueur ? n : n;
+  $('aud-uni').value = audNum(a.venduALaLongueur ? p / n * 1000 : p / n); audCalcule();
+}));
+$('aud-m-peser').addEventListener('click', () => { audMode('peser'); audCalcule(); $('aud-total').focus({ preventScroll: true }); });
+$('aud-m-compter').addEventListener('click', () => { audMode('compter'); audCalcule(); $('aud-compte').focus({ preventScroll: true }); });
+$('aud-ech-btn').addEventListener('click', () => { $('aud-ech').classList.toggle('hidden'); if(!$('aud-ech').classList.contains('hidden')) $('aud-ech-nb').focus({ preventScroll: true }); });
+$('aud-recents').addEventListener('click', e => { const b = e.target.closest('[data-cont]'); if(!b) return; $('aud-cont').value = audNum(Number(b.dataset.cont)); audRecents(); audCalcule(); });
+// Le clavier reste ouvert : les boutons ne prennent pas le focus
+$('aud-carte').addEventListener('mousedown', e => { if(e.target.closest('button')) e.preventDefault(); });
+['aud-total', 'aud-cont', 'aud-uni', 'aud-compte'].forEach(id => $(id).addEventListener('keydown', e => { if(e.key === 'Enter' && !$('aud-ok').disabled){ e.preventDefault(); $('aud-ok').click(); } }));
+
+function audLigne(a, s, r){
+  const av = audS.vu, vieux = aud.lignes[a.id];
+  return { s, code: a.codeProduit || '', nom: (cleanName(a.nomCourt) || '').slice(0, 60), box: audBoxNom(audBoxDe(a)), u: a.venduALaLongueur ? 'mm' : '', pu: a.prixUnitaire ?? 0,
+    av, ap: s === 'ok' ? r.q : null, est: s !== 'ok' && r && !r.err ? r.q : null, m: r && !r.err ? r.m : null, tot: r ? r.tot ?? null : null, cont: r ? r.cont ?? null : null, uni: r ? r.uni ?? null : null, brut: r ? r.brut ?? null : null, prec: r ? r.prec ?? null : null,
+    note: $('aud-note').value.trim().slice(0, 160), t: Date.now(), o: audS.op,
+    prev: vieux ? [...(vieux.prev || []), { s: vieux.s, av: vieux.av, ap: vieux.ap, t: vieux.t }].slice(-6) : [] };
+}
+$('aud-ok').addEventListener('click', async () => {
+  const a = audActuel(), r = audLis(), box = a && audCleBox(a); if(!a || !r || r.err || $('aud-ok').disabled) return;
+  hide($('aud-err'));
+  if(!audS.op) audS.op = nouvelleOp();
+  const id = aud.id, op = audS.op, vu = audS.vu, l = audLigne(a, 'ok', r);
+  const nouveauPoids = r.m === 'pesee' && !a.venduALaLongueur && r.uni !== (a.poids ?? null) ? r.uni : null;
+  const boiteChange = r.m === 'pesee' && r.cont !== aud.contenants[box];
+  const refA = audDoc(id, a.id), refM = doc(db, COL, a.id);
+  let ecrit = null, reel = null;
+  const ok = await saveWithFeedback($('aud-ok'), () => runTransaction(db, async tx => {
+    const [sa, sm] = [await tx.get(refA), await tx.get(refM)];
+    const deja = sa.exists() && sa.data()[a.id] ? JSON.parse(sa.data()[a.id]) : null;
+    if(deja && deja.o === op) return;   // premier essai déjà enregistré
+    if(!sm.exists()) throw erreurDefinitive("Cet article a été supprimé entre-temps.");
+    const d = sm.data(); reel = d.quantiteRestante ?? 0;
+    if(reel !== vu) throw erreurDefinitive(`Le stock de ${a.codeProduit} a changé pendant la pesée : ${fmtNum(vu, 2)} → ${fmtNum(reel, 2)} (vente, réappro…). Vérifie que ta pesée en tient compte, puis appuie à nouveau.`);
+    ecrit = { ...(r.q !== reel ? champsStock(d, r.q) : {}), ...(nouveauPoids !== null ? { poids: nouveauPoids, updatedAt: Date.now() } : {}) };
+    if(Object.keys(ecrit).length) tx.update(refM, ecrit);
+    tx.set(refA, { [a.id]: JSON.stringify(l) }, { merge: true });
+    if(boiteChange) tx.set(doc(db, 'companyInfo', 'audits'), { _contenants: { [box]: r.cont } }, { merge: true });
+  }));
+  if(!ok){ if(reel !== null && reel !== vu){ a.quantiteRestante = reel; if(audActuel() === a){ audS.vu = reel; audS.op = null; $('aud-stock').textContent = a.venduALaLongueur ? fmtQty(a, reel) : fmtNum(reel, 2); audCalcule(); } } return; }
+  Object.assign(a, ecrit || { quantiteRestante: r.q, ...(nouveauPoids !== null ? { poids: nouveauPoids } : {}) });
+  aud.lignes[a.id] = l;
+  if(r.m === 'pesee'){ audS.recents[box] = [r.cont, ...(audS.recents[box] || [])].filter((x, i, t) => t.indexOf(x) === i).slice(0, 4); aud.contenants[box] = r.cont; }
+  if(audActuel() === a && !$('view-audit-pesee').classList.contains('hidden')) audSuivant();
+});
+async function audConsigne(s, btn){
+  const a = audActuel(); if(!a) return;
+  if(s === 'passe' && aud.lignes[a.id] && aud.lignes[a.id].s !== 'doute') return audSuivant();   // déjà vérifié ou déjà passé
+  if(aud.lignes[a.id] && aud.lignes[a.id].s === 'ok' && !confirm(`${a.codeProduit} est déjà vérifié. Le marquer « ${AUD_ST[s]} » ? Son stock ne change pas.`)) return;
+  if(!audS.op) audS.op = nouvelleOp();
+  const l = audLigne(a, s, audLis()), id = aud.id;
+  if(!await saveWithFeedback(btn, () => setDoc(audDoc(id, a.id), { [a.id]: JSON.stringify(l) }, { merge: true }))) return;
+  aud.lignes[a.id] = l;
+  if(audActuel() === a) audSuivant();
+}
+$('aud-passer').addEventListener('click', () => audConsigne('passe', $('aud-passer')));
+$('aud-doute').addEventListener('click', () => audConsigne('doute', $('aud-doute')));
+function audSuivant(){
+  let j = -1;
+  if(audS.revoir){ for(let n = audS.i + 1; n < audS.file.length; n++) if(materiaux.some(a => a.id === audS.file[n])){ j = n; break; } }
+  else { for(let n = 1; n <= audS.file.length; n++){ const k = (audS.i + n) % audS.file.length, id = audS.file[k]; if(!aud.lignes[id] && materiaux.some(a => a.id === id)){ j = k; break; } } }
+  if(j < 0) return audFinBox();
+  audS.i = j; audMontre(false);
+}
+$('aud-prec').addEventListener('click', () => { if(audS.i > 0){ audS.i--; audMontre(false); } });
+$('aud-liste-btn').addEventListener('click', () => {
+  const el = $('aud-liste'); if(!el.classList.toggle('hidden')) el.innerHTML = audS.file.map((id, i) => { const a = materiaux.find(x => x.id === id); if(!a) return ''; const l = aud.lignes[id]; return `<button type="button" class="aud-l${i === audS.i ? ' ici' : ''}" data-i="${i}"><b>${escHtml(a.codeProduit || '—')}</b><span>${escHtml(cleanName(a.nomCourt) || '')}</span><em>${!l ? fmtNum(a.quantiteRestante ?? 0, 2) : l.s === 'ok' ? `${fmtNum(audAvant(l), 2)} → ${fmtNum(l.ap, 2)} ✓` : l.s === 'passe' ? fmtNum(l.av, 2) + ' ✓' : fmtNum(l.av, 2) + ' ?'}</em></button>`; }).join('');
+});
+$('aud-liste').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if(!b) return; audS.i = Number(b.dataset.i); hide($('aud-liste')); audMontre(true); });
+function audFinBox(){
+  hide($('aud-carte')); hide($('aud-liste')); show($('aud-fin')); window.scrollTo(0, 0);
+  const arts = audS.file.map(id => materiaux.find(a => a.id === id)).filter(Boolean), b = audBilan(aud.lignes, arts);
+  const L = audBoxes(), suite = audS.box ? [...L.slice(L.indexOf(audS.box) + 1), ...L.slice(0, L.indexOf(audS.box))].find(k => audArticles(k).some(a => !aud.lignes[a.id])) : null;
+  const revoir = arts.filter(a => aud.lignes[a.id] && aud.lignes[a.id].s === 'doute').map(a => a.id);
+  $('aud-fin').innerHTML = `<h1 style="font-size:22px;margin:0 0 8px;">${audS.box ? escHtml(audBoxNom(audS.box)) + ' : terminée' : 'Reprise terminée'}</h1>
+    <div class="aud-chiffres"><span><b>${b.ok}</b> vérifiés</span><span><b>${b.corriges}</b> corrigés</span><span><b>${b.passe}</b> passé${b.passe > 1 ? 's' : ''}</span><span><b>${b.doute}</b> pas sûrs</span></div>
+    ${suite ? `<button type="button" class="btn btn-primary" data-fin="box" data-k="${escHtml(suite)}" style="width:100%;margin-top:16px;">Box suivante : ${escHtml(audBoxNom(suite))}</button>` : ''}
+    ${revoir.length ? `<button type="button" class="btn" data-fin="revoir" style="width:100%;margin-top:10px;">Reprendre les pas sûrs (${revoir.length})</button>` : ''}
+    <button type="button" class="btn" data-fin="retour" style="width:100%;margin-top:10px;">Retour à l'audit</button>`;
+  $('aud-fin').onclick = e => {
+    const x = e.target.closest('[data-fin]'); if(!x) return;
+    if(x.dataset.fin === 'box') audOuvreBox(x.dataset.k); else if(x.dataset.fin === 'revoir') audLance(audS.box, revoir, true); else navigate('audit');
+  };
+}
+
+/* ---------- Rapport, historique, export ---------- */
+let audR = { id: null, lignes: {}, restants: [], filtre: 'tout' };
+async function audRapport(id){
+  navigate('audit-rapport');
+  const el = $('audit-rapport-body'); el.innerHTML = '<div class="hint">Chargement…</div>';
+  try{
+    const [L, sn] = await Promise.all([audLignes(id), withTimeout(getDoc(doc(db, 'companyInfo', 'audit-' + id)), 20000)]), d = sn.exists() ? sn.data() : {};
+    const restants = d._restants && aud.liste[id].statut === 'termine' ? JSON.parse(d._restants) : audArticles(null).filter(a => !L[a.id]).map(a => [a.codeProduit || '', cleanName(a.nomCourt) || '', audBoxNom(audBoxDe(a)), a.quantiteRestante ?? 0]);
+    audR = { id, lignes: L, restants, filtre: 'tout' };
+    audRapportMontre();
+  } catch(e){ el.innerHTML = `<div class="error-msg">Rapport illisible : ${escHtml(e.message === 'TIMEOUT' ? 'connexion trop lente' : e.message)}</div>`; }
+}
+function audTri(){ return Object.values(audR.lignes).sort((x, y) => (x.box === 'Sans storage box') - (y.box === 'Sans storage box') || x.box.localeCompare(y.box, 'fr', { numeric: true }) || (parseInt(x.code.replace(/\D/g, ''), 10) || 0) - (parseInt(y.code.replace(/\D/g, ''), 10) || 0)); }
+function audTotaux(){
+  const L = Object.values(audR.lignes), r = { ok: 0, passe: 0, doute: 0, corriges: 0, plus: 0, moins: 0, valeur: 0 };
+  L.forEach(l => { r[l.s]++; const e = audEcart(l); if(e){ r.corriges++; if(!l.u){ if(e > 0) r.plus += e; else r.moins += e; } r.valeur += e * (l.pu || 0); } });
+  return r;
+}
+const audSigne = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmtNum(Math.abs(n), 2);
+function audRapportMontre(){
+  const m = aud.liste[audR.id], T = audTotaux();
+  const F = [['tout', 'Tout', audTri().length], ['ecart', 'Corrigés', T.corriges], ['passe', 'Passés, stock gardé', T.passe], ['doute', 'Pas sûrs', T.doute], ['reste', 'Non vérifiés', audR.restants.length]];
+  const lignes = audR.filtre === 'reste' ? [] : audTri().filter(l => audR.filtre === 'tout' || (audR.filtre === 'ecart' ? audEcart(l) !== 0 : l.s === audR.filtre));
+  $('audit-rapport-body').innerHTML = `
+    <div class="hint" style="margin-top:0;">${m.statut === 'termine' ? `Du ${escHtml(fmtDateHeure(m.debut))} au ${escHtml(fmtDateHeure(m.fin))}` : `En cours depuis le ${escHtml(fmtDateHeure(m.debut))}`}</div>
+    <div class="aud-resume"><div class="aud-chiffres"><span><b>${T.ok}</b> vérifiés</span><span><b>${T.corriges}</b> corrigés</span><span><b>${T.passe}</b> passé${T.passe > 1 ? 's' : ''}</span><span><b>${T.doute}</b> pas sûrs</span><span><b>${audR.restants.length}</b> non vérifiés</span></div>
+      <div class="hint">Pièces en plus : <b>+${fmtNum(T.plus, 0)}</b> · en moins : <b>${audSigne(T.moins)}</b> · valeur d'achat de l'écart : <b>${T.valeur < 0 ? '−' : T.valeur > 0 ? '+' : ''}${fmtEuro(Math.abs(T.valeur))}</b></div></div>
+    <button type="button" class="btn btn-primary" data-rap="export" style="width:100%;margin:12px 0;">Exporter le tableau (.xlsx)</button>
+    <div class="rsv-chips">${F.map(([k, t, n]) => `<button type="button" class="filter-chip${audR.filtre === k ? ' active' : ''}" data-rap-f="${k}">${t} (${n})</button>`).join('')}</div>
+    ${audR.filtre === 'reste' ? audR.restants.map(x => `<div class="aud-r"><div><b>${escHtml(x[0])}</b> ${escHtml(x[1])}</div><div class="hint" style="margin:0;">${escHtml(x[2])} · stock appli ${fmtNum(x[3], 2)}</div></div>`).join('') || '<div class="hint">Tout a été vérifié.</div>'
+      : lignes.map(l => { const e = audEcart(l); return `<div class="aud-r"><div><b>${escHtml(l.code)}</b> ${escHtml(l.nom)}<span class="aud-r-e">${l.s === 'ok' ? (e ? audSigne(e) : '=') : l.s === 'passe' ? 'Gardé' : AUD_ST[l.s]}</span></div>
+        <div class="hint" style="margin:0;">${escHtml(l.box)} · ${l.s === 'ok' ? `${fmtNum(audAvant(l), 2)} → ${fmtNum(l.ap, 2)}${l.u ? ' mm' : ''} · ${l.m === 'pesee' ? `pesée${l.prec >= 1 ? ` (± ${l.prec})` : ''}` : 'comptage'}` : `stock laissé à ${fmtNum(l.av, 2)}${l.est !== null ? ` · estimé ${fmtNum(l.est, 2)}` : ''}`} · ${escHtml(fmtDateHeure(l.t))}${l.note ? `<br>${escHtml(l.note)}` : ''}</div></div>`; }).join('') || '<div class="hint">Rien ici.</div>'}`;
+}
+$('audit-rapport-body').addEventListener('click', e => {
+  const f = e.target.closest('[data-rap-f]'); if(f){ audR.filtre = f.dataset.rapF; audRapportMontre(); return; }
+  if(e.target.closest('[data-rap="export"]')) audExporte();
+});
+function audClasseur(){
+  const m = aud.liste[audR.id], T = audTotaux(), L = audTri(), wb = XLSX.utils.book_new();
+  const feuille = (nom, lignes, larg) => { const ws = XLSX.utils.aoa_to_sheet(lignes); ws['!cols'] = larg.map(w => ({ wch: w })); XLSX.utils.book_append_sheet(wb, ws, nom); };
+  feuille('Résumé', [["Audit de l'inventaire Faberhaus Elements"], ['Début', fmtDateHeure(m.debut)], ['Fin', m.fin ? fmtDateHeure(m.fin) : 'en cours'], ['Vérifiés', T.ok], ['dont corrigés', T.corriges], ['Passés (ancien stock gardé)', T.passe], ['Pas sûrs', T.doute], ['Non vérifiés', audR.restants.length], ['Pièces en plus', T.plus], ['Pièces en moins', T.moins], ["Valeur d'achat de l'écart (€)", Math.round(T.valeur * 100) / 100]], [32, 22]);
+  const D = [['Storage box', 'Code produit', 'Nom', 'Statut', 'Ancien stock', 'Nouveau stock', 'Écart', 'Unité', "Valeur d'achat de l'écart (€)", 'Estimation (non appliquée)', 'Méthode', 'Poids total (g)', 'Boîte vide (g)', "Poids d'un élément (g)", 'Calcul exact', 'Précision ±', 'Note', 'Date', 'Nombre de passages']];
+  L.forEach(l => { const e = audEcart(l), ok = l.s === 'ok'; D.push([l.box, l.code, l.nom, AUD_ST[l.s], ok ? audAvant(l) : l.av, ok ? l.ap : l.s === 'passe' ? l.av : '', e, l.u || 'pièce', Math.round(e * (l.pu || 0) * 100) / 100, l.est ?? '', l.m === 'pesee' ? 'Pesée' : l.m === 'compte' ? 'Comptage' : '', l.tot ?? '', l.cont ?? '', l.uni ?? '', l.brut ?? '', l.prec ?? '', l.note || '', fmtDateHeure(l.t), (l.prev || []).length + 1]); });
+  feuille('Détail', D, [16, 13, 34, 11, 11, 13, 9, 8, 14, 14, 11, 12, 12, 14, 11, 10, 30, 19, 10]);
+  feuille('À revoir', [['Storage box', 'Code produit', 'Nom', 'Raison', 'Stock appli', 'Estimation', 'Note'], ...L.filter(l => l.s === 'doute').map(l => [l.box, l.code, l.nom, AUD_ST[l.s], l.av, l.est ?? '', l.note || '']), ...audR.restants.map(x => [x[2], x[0], x[1], 'Non vérifié', x[3], '', ''])], [16, 13, 34, 13, 11, 11, 30]);
+  return wb;
+}
+function audExporte(){ XLSX.writeFile(audClasseur(), `faberhaus-audit-${new Date(aud.liste[audR.id].fin || Date.now()).toLocaleDateString('sv-SE')}.xlsx`); }
+$('box-detail-audit').addEventListener('click', async () => {
+  const k = editingBoxId, btn = $('box-detail-audit');
+  try{ await audCharge(); } catch(e){ alert("L'audit n'a pas pu être chargé. Vérifie ta connexion et réessaie."); return; }
+  if(!aud.id && !(confirm('Aucun audit en cours. En commencer un ?') && await audCommence(btn))) return;
+  audOuvreBox(k);
 });
 
 /* ==================================================================
