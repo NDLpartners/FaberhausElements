@@ -1887,7 +1887,8 @@ button#inv-menu-btn[aria-expanded="true"]{position:relative;z-index:60;}
 .inv-menu-l:active{background:#E8ECF6;}
 .inv-menu-l:focus-visible,#inv-menu-btn:focus-visible{outline:2px solid #23408F;outline-offset:-2px;}
 .inv-menu-l svg{width:20px;height:20px;flex:none;color:#23408F;}
-#inv-rsv-logo{width:20px;height:20px;flex:none;background:#23408F;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat;}
+.logo-v{display:block;width:22px;height:22px;background:currentColor;-webkit-mask:var(--logo-v) center/contain no-repeat;mask:var(--logo-v) center/contain no-repeat;}
+#inv-rsv-logo{width:20px;height:20px;flex:none;background:#23408F;-webkit-mask:var(--logo-v) center/contain no-repeat;mask:var(--logo-v) center/contain no-repeat;}
 #inv-scan-btn{display:none !important;} /* scanner masqué pour le moment */
 #view-inventaire .list-title-row h1{font-size:20px;white-space:nowrap;}
 /* Charte du 18 nov. : champs de saisie, contour bleu d'environ 1,5 px au focus, sans anneau extérieur */
@@ -2153,6 +2154,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
           <div class="home-utility-text">
             <div class="label">Améliorer l'application</div>
             <div class="desc">Suggestions et signalements</div>
+          </div>
+        </button>
+        <div class="home-more-category">Jeu</div>
+        <button class="home-utility" id="pre-jouer">
+          <div class="home-utility-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258l-.017-.151A4 4 0 0 0 17.32 5Z"/></svg>
+          </div>
+          <div class="home-utility-text">
+            <div class="label">Le Pré de Caramel</div>
+            <div class="desc">S'occuper de Caramel et de son pré</div>
           </div>
         </button>
       </div>
@@ -3921,8 +3932,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
       </button>
 
       <button type="button" class="home-card home-card-full ne-choice" id="ne-choice-reserve">
-        <div class="home-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258l-.017-.151A4 4 0 0 0 17.32 5Z"/></svg></div>
-        <div class="home-card-text"><div class="label">Réserve Vinted</div><div class="desc">Trier le stock en jouant</div></div>
+        <div class="home-card-icon"><i class="logo-v" aria-hidden="true"></i></div>
+        <div class="home-card-text"><div class="label">Réserve Vinted</div><div class="desc">Pièces mises de côté pour Vinted</div></div>
         <svg class="ne-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
 
@@ -3982,7 +3993,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
     <!-- ---------- MES REPÉRAGES ---------- -->
     <section id="view-reservations" class="hidden">
-      <div class="rsv-titre"><h1 style="font-size:22px;margin:0;">Réserve Vinted</h1><button type="button" class="btn btn-primary" id="pre-jouer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 17a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2Z"/><path d="M6 15v-2"/><path d="M12 15V9"/><circle cx="12" cy="6" r="3"/></svg>Jouer</button></div>
+      <div class="rsv-titre"><h1 style="font-size:22px;margin:0;">Réserve Vinted</h1></div>
       <p class="rsv-help">Les pièces <b>réservées</b> sont mises de côté pour Vinted. Choisis pour chaque article où il est vendu : <b>Vinted</b>, <b>Site</b> ou <b>Les deux</b>. Le <b>stock pour le site</b> est le stock restant moins cette réserve (0 si Vinted seul ; sans réserve si Site seul). Une vente Vinted encodée retire ses pièces de la réserve.</p>
       <div class="rsv-total" id="rsv-total"></div>
       <input type="text" id="rsv-search" placeholder="Rechercher par code ou nom…" autocomplete="off">
@@ -4455,7 +4466,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v2026.11.2 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v2026.11.3 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -10092,7 +10103,7 @@ $('view-reservations').addEventListener('change', async e => {
   const pk = e.target.closest('[data-rsv-pick]');
   if(pk){ const id = pk.closest('.rsv-row').dataset.id; if(pk.checked) rsvSel.add(id); else rsvSel.delete(id); rsvBar(); return; }
 });
-$('inv-rsv-logo').style.setProperty('--logo', `url(${VINTED_LOGO_PNG})`);
+document.documentElement.style.setProperty('--logo-v', `url(${VINTED_LOGO_PNG})`);
 function invMenu(ouvert){ $('inv-menu').classList.toggle('hidden', !ouvert); $('inv-menu-voile').classList.toggle('hidden', !ouvert); $('inv-menu-btn').setAttribute('aria-expanded', ouvert); }
 $('inv-menu-btn').addEventListener('click', () => invMenu($('inv-menu').classList.contains('hidden')));
 $('inv-menu-voile').addEventListener('click', () => invMenu(false));
@@ -10103,17 +10114,16 @@ $('inv-rsv-btn').addEventListener('click', () => navigate('reservations'));
 $('inv-audit-btn').addEventListener('click', () => navigate('audit'));
 
 /* ==================================================================
-   LE PRÉ DE CARAMEL (pre.html) : jeu de tri du stock Vinted / site
-   Chaque choix est noté sur l'appareil puis écrit dans Firebase ; il n'est retiré de la
-   file que lorsque Firebase a confirmé. trieLe : date du dernier choix (null = à trier).
+   LE PRÉ DE CARAMEL (pre.html) : un jeu, sans aucun lien avec le stock ni la réserve.
+   La partie est gardée dans companyInfo/preCaramel. La file ci-dessous ne sert plus qu'à
+   finir d'écrire les choix validés dans l'ancien jeu de tri et pas encore confirmés.
    ================================================================== */
-const PRE_FILE = 'pre-file-1', PRE_CANAUX = ['vinted-seul', 'site-seul', 'site', 'aucun'];
-let preCadre = null, preErreur = '', preMinuterie = 0, prePartie = null;
-const preCours = {}, preAvant = {};
+const PRE_FILE = 'pre-file-1';
+let preCadre = null, preMinuterie = 0, prePartie = null;
+const preCours = {};
 let preFile = (() => { try{ return JSON.parse(localStorage.getItem(PRE_FILE) || '{}') || {}; } catch(_){ return {}; } })();
 function preNote(){ try{ localStorage.setItem(PRE_FILE, JSON.stringify(preFile)); } catch(_){} }
 function preDis(type, o){ if(preCadre && preCadre.f.contentWindow) preCadre.f.contentWindow.postMessage({ pre: type, ...(o || {}) }, location.origin); }
-function preEtat(){ preDis('etat', { attente: Object.keys(preFile).length, erreur: preErreur }); }
 function preReprend(){   // après chaque chargement : un choix plus récent fait ailleurs l'emporte
   let change = false;
   Object.entries(preFile).forEach(([id, e]) => {
@@ -10124,11 +10134,6 @@ function preReprend(){   // après chaque chargement : un choix plus récent fai
   if(change) preNote();
   preVide();
 }
-function preAjoute(a, ch){
-  preFile[a.id] = { ch, t: Date.now() };
-  Object.assign(a, ch);
-  preNote(); preVide();
-}
 function preVide(){
   clearTimeout(preMinuterie); preMinuterie = 0;
   if(auth.currentUser) Object.entries(preFile).forEach(([id, e]) => {
@@ -10136,20 +10141,11 @@ function preVide(){
     preCours[id] = e.t;
     updateDoc(doc(db, COL, id), { ...e.ch, updatedAt: e.t }).then(() => {
       if(preFile[id] && preFile[id].t === e.t){ delete preFile[id]; preNote(); }
-      preErreur = '';
-    }, err => { console.error(err); preErreur = (err && err.message) || 'erreur inconnue'; })
-      .finally(() => { if(preCours[id] === e.t) delete preCours[id]; preEtat(); if(Object.keys(preFile).length && !preMinuterie) preMinuterie = setTimeout(preVide, 15000); });
+    }, err => { console.error(err); })
+      .finally(() => { if(preCours[id] === e.t) delete preCours[id]; if(Object.keys(preFile).length && !preMinuterie) preMinuterie = setTimeout(preVide, 15000); });
   });
-  preEtat();
 }
 addEventListener('online', () => preVide());
-function preProduits(){
-  const pool = ioProductPool().filter(a => (Number(a.quantiteRestante) || 0) > 0);
-  const gain = a => { const r = calcRentabilite(a.prixUnitaire, prixEffectif(a)); return r ? r.beneficeUnitaire : -Infinity; };
-  const todo = pool.filter(a => !a.trieLe).map(a => [a, gain(a)]).sort((x, y) => y[1] === x[1] ? 0 : y[1] > x[1] ? 1 : -1).map(x => x[0]);
-  return { total: pool.length, tries: pool.length - todo.length, produits: todo.map(a => ({ id: a.id, code: a.codeProduit || '—', nom: a.nomCourt || '', q: Number(a.quantiteRestante) || 0,
-    achat: a.prixUnitaire ?? null, vente: prixEffectif(a) ?? null, mat: a.materiau || '', four: a.fournisseur || '', mm: !!a.venduALaLongueur })) };
-}
 async function preChargePartie(){
   try{
     const snap = await Promise.race([getDoc(doc(db, 'companyInfo', 'preCaramel')), new Promise(ok => setTimeout(() => ok(null), 4000))]);
@@ -10160,10 +10156,9 @@ async function preChargePartie(){
 ['gesturestart', 'gesturechange', 'touchmove', 'selectstart', 'dblclick'].forEach(n => document.addEventListener(n, e => { if(preCadre && e.cancelable) e.preventDefault(); }, { passive: false }));
 function preOuvre(){
   if(preCadre) return;
-  if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=2026.11.2'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=2026.11.3'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -10174,29 +10169,20 @@ function preOuvre(){
 function preFerme(){
   if(!preCadre) return;
   preCadre.el.remove(); preCadre.rendTheme(); preCadre = null; document.body.style.overflow = '';
-  Object.keys(preAvant).forEach(k => delete preAvant[k]);
-  preVide();
-  if(!$('view-reservations').classList.contains('hidden')) renderReservations();
 }
 addEventListener('message', async e => {
   if(!preCadre || e.source !== preCadre.f.contentWindow || e.origin !== location.origin || !e.data) return;
-  const d = e.data, a = d.id ? materiaux.find(x => x.id === d.id) : null;
+  const d = e.data;
   if(d.pre === 'pret'){
     const c = preCadre; c.f.style.visibility = ''; c.el.querySelector('.pre-attente').remove();
     const partie = await prePartie;
-    if(preCadre === c){ preDis('init', { ...preProduits(), partie }); preEtat(); c.f.contentWindow.focus(); }
-  } else if(d.pre === 'tri' && a && PRE_CANAUX.includes(d.canal)){
-    if(!preAvant[a.id]) preAvant[a.id] = { canalSite: rsvCanal(a), reserveVinted: reserveVinted(a), trieLe: a.trieLe || null };
-    const stock = Math.max(0, Number(a.quantiteRestante) || 0);
-    preAjoute(a, { canalSite: d.canal, reserveVinted: Math.min(stock, Math.max(0, Number(d.reserve) || 0)), trieLe: Date.now() });
-  } else if(d.pre === 'annule' && a && preAvant[a.id]){
-    preAjoute(a, { ...preAvant[a.id] });
+    if(preCadre === c){ preDis('init', { partie }); c.f.contentWindow.focus(); }
   } else if(d.pre === 'partie' && typeof d.json === 'string' && d.json.length < 100000){
     setDoc(doc(db, 'companyInfo', 'preCaramel'), { json: d.json, date: Number(d.date) || Date.now() }).catch(err => console.warn('Partie gardée sur cet appareil seulement', err));
   } else if(d.pre === 'quitter'){ preFerme(); }
 });
 $('pre-jouer').addEventListener('click', preOuvre);
-$('ne-choice-reserve').addEventListener('click', preOuvre);
+$('ne-choice-reserve').addEventListener('click', () => navigate('reservations'));
 
 // Mini-courbes des cartes : 30 derniers jours, chaque point = valeur sur 7 jours glissants
 // (le dernier point correspond donc exactement au chiffre affiché sur la carte).
@@ -12902,6 +12888,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'2026.11.3', items:["Le Pré de Caramel devient un jeu, sans lien avec le stock ni la réserve Vinted : un geste de soin par lieu, cueillette et album, décorations du ranch. Il se lance depuis Plus d'options.","Réserve Vinted : la carte de Nouvel encodage ouvre l'écran Réserve Vinted."] },
   { v:'2026.11.2', items:["Inventaire général : un seul bouton menu regroupe Ajouter un produit, Réserve Vinted (logo Vinted à la place de la balance) et Audit de l'inventaire."] },
   { v:'2026.11.1', items:["Audit de l'inventaire : dans la liste d'une box, « Cocher plusieurs stocks OK » garde d'un coup le stock des articles cochés, qui ne sont plus proposés. « Remettre à vérifier » annule.","Nouvelle numérotation des versions : année, mois, puis numéro de la mise à jour dans le mois. Elle prend la suite de la v35.74."] },
   { v:'35.74', items:["Audit de l'inventaire (Plus d'options, ou depuis une storage box) : recomptage par pesée, box par box, numéro après numéro. Poids de la boîte vide gardé par box, échantillon pour les petits éléments, comptage à la main possible. L'ancien stock est affiché à chaque référence : s'il semble juste, « Passer » le garde. « Pas sûr » met l'article à revoir. Rapport, historique et export en tableau."] },
