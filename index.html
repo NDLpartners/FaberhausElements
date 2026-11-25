@@ -593,8 +593,16 @@ button.btn-danger:hover{background:var(--error);color:#fff;}
 .aud-deux>div{flex:1;text-align:center;}
 .aud-deux .btn{width:100%;}
 .aud-deux small{font-size:11.5px;color:#595959;}
-.aud-liste-l{border:1px solid #000;max-height:300px;overflow:auto;margin:8px 0;}
-.aud-l{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:10px;padding:9px 10px;border-bottom:1px solid var(--stone);font-size:13px;}
+.aud-liste-l{border:1px solid #000;max-height:min(52vh,460px);overflow:auto;margin:4px 0 8px;}
+.aud-sel-haut{display:flex;gap:18px;margin-top:4px;}
+.aud-sel-haut .aud-lien{min-width:0;}
+.aud-sel-haut [data-sel=fin]{margin-left:auto;}
+.aud-coche{flex:none;width:18px;height:18px;border:1px solid #000;border-radius:2px;background:#fff;align-self:center;position:relative;}
+.aud-coche.oui{background:#23408F;border-color:#23408F;}
+.aud-coche.oui::after{content:'';position:absolute;left:5.5px;top:1.5px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+.aud-coche.vide{border-color:transparent;background:none;}
+.aud-l.fige{cursor:default;color:#595959;}
+.aud-l{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:10px;padding:11px 10px;border-bottom:1px solid var(--stone);font-size:13px;}
 .aud-l.ici{background:#E8ECF6;}
 .aud-l b{font-weight:500;flex:none;min-width:52px;}
 .aud-l span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -3552,7 +3560,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
       <div id="aud-carte">
         <div class="aud-haut"><button type="button" class="aud-lien" id="aud-prec">‹ Précédent</button><b id="aud-tete"></b><button type="button" class="aud-lien" id="aud-liste-btn">Liste</button></div>
         <div class="aud-barre"><i id="aud-progres"></i></div>
-        <div id="aud-liste" class="aud-liste-l hidden"></div>
+        <div id="aud-liste" class="hidden"></div>
         <div class="aud-art"><img id="aud-photo" alt="" class="hidden"><div class="aud-txt"><div class="aud-ligne1"><b id="aud-code"></b></div><div id="aud-nom"></div><div id="aud-detail" class="hint"></div></div><div class="aud-ancien"><span>Ancien stock</span><b id="aud-stock"></b></div></div>
         <div id="aud-etat" class="aud-etat hidden"></div>
         <div class="aud-modes"><button type="button" class="filter-chip active" id="aud-m-peser">Peser</button><button type="button" class="filter-chip" id="aud-m-compter">Compter</button></div>
@@ -4430,7 +4438,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v35.74 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v2026.11.1 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -10130,7 +10138,7 @@ function preOuvre(){
   if(!materiaux.length){ alert("L'inventaire charge encore, réessaie dans un instant."); return; }
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=35.74'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=2026.11.1'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -12869,6 +12877,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'2026.11.1', items:["Audit de l'inventaire : dans la liste d'une box, « Cocher plusieurs stocks OK » garde d'un coup le stock des articles cochés, qui ne sont plus proposés. « Remettre à vérifier » annule.","Nouvelle numérotation des versions : année, mois, puis numéro de la mise à jour dans le mois. Elle prend la suite de la v35.74."] },
   { v:'35.74', items:["Audit de l'inventaire (Plus d'options, ou depuis une storage box) : recomptage par pesée, box par box, numéro après numéro. Poids de la boîte vide gardé par box, échantillon pour les petits éléments, comptage à la main possible. L'ancien stock est affiché à chaque référence : s'il semble juste, « Passer » le garde. « Pas sûr » met l'article à revoir. Rapport, historique et export en tableau."] },
   { v:'35.73', items:["Stock : ventes, réappros, créations, suppressions de vente et pesées relisent le stock réel avant d'écrire et ne peuvent plus compter deux fois quand la connexion est lente.","Fiche produit : le stock n'est enregistré que s'il a été modifié ; avertissement s'il a changé ailleurs entre-temps. Une création garde son code FH.","Réserve Vinted : ne dépasse plus jamais le stock ; l'avertissement de vente Vinted tient compte des articles « Vinted seul ».","Import Excel : l'appli montre les stocks qui changeraient et garde les siens par défaut. Chaque fichier importé est archivé (date, changements avant → après, téléchargement) dans « Excel importés »."] },
   { v:'35.72', items:["Le Pré de Caramel : des papiers peuvent traîner dans le jardin de la maison. Une fois trouvés, Emile vient les contrôler.","Le Pré de Caramel : musique de fond douce, « L'as-tu vu » le jour et « Plaisir d'amour » le soir (bouton SON).","Le Pré de Caramel : les trouvailles apparaissent au hasard dans tout le pré. Emile vient toutes les 4 minutes, et le soir a sa propre phrase d'accueil.","Correctif : dans Le Pré de Caramel, Emile restait bloqué en arrivant et l'ordre des produits pouvait se décaler."] },
@@ -15405,7 +15414,7 @@ $('io-photos-file').addEventListener('change', async (e)=>{
    Stock compté = (poids total − boîte vide) ÷ poids d'un élément
    ================================================================== */
 const AUD_SANS = 'sans-box', AUD_BALANCE = .01;   // précision supposée de la balance : 0,01 g
-const AUD_ST = { ok: 'Vérifié', passe: 'Passé, stock gardé', doute: 'Pas sûr' };
+const AUD_ST = { ok: 'Vérifié', passe: 'Stock OK, gardé', doute: 'Pas sûr' };
 let aud = { liste: {}, contenants: {}, id: null, lignes: {}, charge: false };
 let audS = { box: null, file: [], i: 0, revoir: false, mode: 'peser', op: null, sens: null, recents: {} };
 const audNum = v => v === null || v === undefined ? '' : String(Math.round(v * 1e5) / 1e5).replace('.', ',');
@@ -15452,13 +15461,13 @@ async function renderAudit(){
   el.innerHTML = (m ? `
     <div class="aud-resume"><b>Audit commencé le ${escHtml(fmtDateHeure(m.debut))}</b>
       <div class="aud-barre"><i style="width:${T.total ? (T.total - T.reste) / T.total * 100 : 0}%"></i></div>
-      <div class="aud-chiffres"><span><b>${T.ok}</b> vérifiés</span><span><b>${T.corriges}</b> corrigés</span><span><b>${T.passe}</b> passé${T.passe > 1 ? 's' : ''}</span><span><b>${T.doute}</b> pas sûrs</span><span><b>${T.reste}</b> restants</span></div></div>
+      <div class="aud-chiffres"><span><b>${T.ok}</b> vérifiés</span><span><b>${T.corriges}</b> corrigés</span><span><b>${T.passe}</b> stock OK</span><span><b>${T.doute}</b> pas sûrs</span><span><b>${T.reste}</b> restants</span></div></div>
     ${T.doute ? `<button type="button" class="btn" data-aud="revoir" style="width:100%;margin-top:10px;">Reprendre les pas sûrs (${T.doute})</button>` : ''}
     <div class="aud-liste">${audBoxes().map(k => { const L = audArticles(k); if(!L.length) return ''; const b = audBilan(aud.lignes, L), fait = b.total - b.reste;
       return `<button type="button" class="aud-box" data-aud-box="${escHtml(k)}"><span class="aud-box-nom">${escHtml(audBoxNom(k))}</span><span class="aud-box-etat">${b.doute ? `${b.doute} à revoir · ` : ''}${fait} / ${b.total}${b.reste ? '' : ' ✓'}</span><span class="aud-barre"><i style="width:${fait / b.total * 100}%"></i></span></button>`; }).join('')}</div>
     <div class="btn-row" style="margin-top:14px;"><button type="button" class="btn" data-aud="rapport" style="flex:1;">Rapport</button><button type="button" class="btn" data-aud="finir" style="flex:1;">Terminer l'audit</button></div>`
     : `<button type="button" class="btn btn-primary" data-aud="debut" style="width:100%;margin-top:6px;">Commencer un audit</button>`)
-    + (finis.length ? `<div class="form-section-title" style="margin-top:26px;">Audits précédents</div>${finis.map(([id, x]) => `<button type="button" class="aud-box" data-aud-hist="${escHtml(id)}"><span class="aud-box-nom">${escHtml(fmtDateHeure(x.fin))}</span><span class="aud-box-etat">${x.ok || 0} vérifiés · ${x.corriges || 0} corrigés${x.passe ? ` · ${x.passe} gardé${x.passe > 1 ? 's' : ''}` : ''}${x.doute ? ` · ${x.doute} à revoir` : ''}</span></button>`).join('')}` : '');
+    + (finis.length ? `<div class="form-section-title" style="margin-top:26px;">Audits précédents</div>${finis.map(([id, x]) => `<button type="button" class="aud-box" data-aud-hist="${escHtml(id)}"><span class="aud-box-nom">${escHtml(fmtDateHeure(x.fin))}</span><span class="aud-box-etat">${x.ok || 0} vérifiés · ${x.corriges || 0} corrigés${x.passe ? ` · ${x.passe} stock OK` : ''}${x.doute ? ` · ${x.doute} à revoir` : ''}</span></button>`).join('')}` : '');
 }
 $('audit-body').addEventListener('click', async e => {
   const b = e.target.closest('[data-aud-box]'); if(b) return audOuvreBox(b.dataset.audBox);
@@ -15479,7 +15488,7 @@ async function audCommence(btn){
 async function audTermine(btn){
   aud.lignes = await audLignes(aud.id).catch(() => aud.lignes);
   const L = audArticles(null), T = audBilan(aud.lignes, L);
-  if(!confirm(`Terminer l'audit ?\n${T.ok} vérifiés, ${T.passe} passés (stock gardé), ${T.doute} pas sûrs, ${T.reste} non vérifiés.\nTout reste consultable dans « Audits précédents ».`)) return;
+  if(!confirm(`Terminer l'audit ?\n${T.ok} vérifiés, ${T.passe} stock OK (gardé), ${T.doute} pas sûrs, ${T.reste} non vérifiés.\nTout reste consultable dans « Audits précédents ».`)) return;
   const id = aud.id, m = { ...aud.liste[id], statut: 'termine', fin: Date.now(), total: T.total, ok: T.ok, passe: T.passe, doute: T.doute, corriges: T.corriges };
   const restants = JSON.stringify(L.filter(a => !aud.lignes[a.id]).map(a => [a.codeProduit || '', (cleanName(a.nomCourt) || '').slice(0, 60), audBoxNom(audBoxDe(a)), a.quantiteRestante ?? 0]));
   const ok = await saveWithFeedback(btn, async () => {
@@ -15500,6 +15509,7 @@ async function audOuvreBox(k){
 function audLance(k, file, revoir){
   if(!file.length) return;
   audS = { ...audS, box: k, file, revoir, i: 0, mode: 'peser' };
+  audSel = null; hide($('aud-liste'));
   if(!revoir){ const j = file.findIndex(id => !aud.lignes[id]); if(j < 0){ navigate('audit-pesee'); audFinBox(); return; } audS.i = j; }
   navigate('audit-pesee'); audMontre(true);
 }
@@ -15646,17 +15656,82 @@ function audSuivant(){
   audS.i = j; audMontre(false);
 }
 $('aud-prec').addEventListener('click', () => { if(audS.i > 0){ audS.i--; audMontre(false); } });
-$('aud-liste-btn').addEventListener('click', () => {
-  const el = $('aud-liste'); if(!el.classList.toggle('hidden')) el.innerHTML = audS.file.map((id, i) => { const a = materiaux.find(x => x.id === id); if(!a) return ''; const l = aud.lignes[id]; return `<button type="button" class="aud-l${i === audS.i ? ' ici' : ''}" data-i="${i}"><b>${escHtml(a.codeProduit || '—')}</b><span>${escHtml(cleanName(a.nomCourt) || '')}</span><em>${!l ? fmtNum(a.quantiteRestante ?? 0, 2) : l.s === 'ok' ? `${fmtNum(audAvant(l), 2)} → ${fmtNum(l.ap, 2)} ✓` : l.s === 'passe' ? fmtNum(l.av, 2) + ' ✓' : fmtNum(l.av, 2) + ' ?'}</em></button>`; }).join('');
+/* Liste de la box : aller à un article, ou en cocher plusieurs dont le stock est OK (stock gardé, plus à vérifier) */
+let audSel = null;   // null = pas de sélection en cours
+function audListeMontre(){
+  const n = audSel ? audSel.size : 0, cochables = audS.file.filter(audCochable);
+  const gardes = audSel ? [...audSel].filter(id => aud.lignes[id] && aud.lignes[id].s === 'passe').length : 0;
+  const haut = $('aud-liste').querySelector('.aud-liste-l')?.scrollTop || 0;
+  $('aud-liste').innerHTML = `<div class="aud-sel-haut">${audSel ? `<button type="button" class="aud-lien" data-sel="tout">Tout (${cochables.length})</button><button type="button" class="aud-lien" data-sel="rien">Aucun</button><button type="button" class="aud-lien" data-sel="fin">Annuler</button>` : `<button type="button" class="aud-lien" data-sel="debut">Cocher plusieurs stocks OK</button>`}</div>
+    <div class="aud-liste-l">${audS.file.map((id, i) => {
+      const a = materiaux.find(x => x.id === id); if(!a) return '';
+      const l = aud.lignes[id], q = v => a.venduALaLongueur ? fmtQty(a, v) : fmtNum(v, 2);
+      const etat = !l ? q(a.quantiteRestante ?? 0) : l.s === 'ok' ? `${q(audAvant(l))} → ${q(l.ap)} ✓` : l.s === 'passe' ? `${q(l.av)} OK` : `${q(l.av)} ?`;
+      const c = audSel ? (l && l.s === 'ok' ? '<i class="aud-coche vide"></i>' : `<i class="aud-coche${audSel.has(id) ? ' oui' : ''}"></i>`) : '';
+      return `<button type="button" class="aud-l${i === audS.i && !audSel ? ' ici' : ''}${audSel && l && l.s === 'ok' ? ' fige' : ''}" data-i="${i}"${audSel ? ` role="checkbox" aria-checked="${audSel.has(id)}"${l && l.s === 'ok' ? ' disabled' : ''}` : ''}>${c}<b>${escHtml(a.codeProduit || '—')}</b><span>${escHtml(cleanName(a.nomCourt) || '')}</span><em>${escHtml(etat)}</em></button>`; }).join('')}</div>
+    ${audSel ? `<button type="button" class="btn btn-primary" data-sel="ok" style="width:100%;"${n - gardes ? '' : ' disabled'}>Stock OK, ne pas revérifier${n - gardes ? ` (${n - gardes})` : ''}</button>${gardes ? `<button type="button" class="btn" data-sel="refaire" style="width:100%;margin-top:8px;">Remettre à vérifier (${gardes})</button>` : ''}` : ''}`;
+  const L = $('aud-liste').querySelector('.aud-liste-l'); L.scrollTop = haut;
+}
+// On peut cocher tout ce qui n'a pas déjà été vérifié par pesée ou comptage
+function audCochable(id){ return materiaux.some(a => a.id === id) && !aud.lignes[id]; }
+$('aud-liste-btn').addEventListener('click', () => { audSel = null; if(!$('aud-liste').classList.toggle('hidden')) audListeMontre(); });
+$('aud-liste').addEventListener('click', async e => {
+  const x = e.target.closest('[data-sel]');
+  if(x){
+    const k = x.dataset.sel;
+    if(k === 'debut') audSel = new Set();
+    else if(k === 'fin') audSel = null;
+    else if(k === 'tout') audSel = new Set(audS.file.filter(audCochable));
+    else if(k === 'rien') audSel = new Set();
+    else return audLot(k, x);
+    audListeMontre(); return;
+  }
+  const b = e.target.closest('[data-i]'); if(!b) return;
+  const i = Number(b.dataset.i), id = audS.file[i];
+  if(audSel){ if(audSel.has(id)) audSel.delete(id); else audSel.add(id); audListeMontre(); return; }
+  audS.i = i; hide($('aud-liste')); audMontre(true);
 });
-$('aud-liste').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if(!b) return; audS.i = Number(b.dataset.i); hide($('aud-liste')); audMontre(true); });
+async function audLot(k, btn){
+  const id = aud.id, gardes = [...audSel].filter(x => aud.lignes[x] && aud.lignes[x].s === 'passe'), refaire = k === 'refaire';
+  const arts = (refaire ? gardes : [...audSel].filter(x => !gardes.includes(x))).map(x => materiaux.find(a => a.id === x)).filter(a => a && !(aud.lignes[a.id] && aud.lignes[a.id].s === 'ok'));
+  if(!arts.length) return;
+  const t = Date.now(), op = nouvelleOp(), neuf = {};
+  arts.forEach(a => {
+    const vieux = aud.lignes[a.id];
+    neuf[a.id] = refaire ? null : { s: 'passe', code: a.codeProduit || '', nom: (cleanName(a.nomCourt) || '').slice(0, 60), box: audBoxNom(audBoxDe(a)), u: a.venduALaLongueur ? 'mm' : '', pu: a.prixUnitaire ?? 0,
+      av: a.quantiteRestante ?? 0, ap: null, est: null, m: null, tot: null, cont: null, uni: null, brut: null, prec: null, note: vieux && vieux.note || '', t, o: op, lot: true,
+      prev: vieux ? [...(vieux.prev || []), { s: vieux.s, av: vieux.av, ap: vieux.ap, t: vieux.t }].slice(-6) : [] };
+  });
+  let deja = [];
+  // Dans une transaction : un article vérifié entre-temps sur un autre téléphone n'est pas écrasé
+  const ok = await saveWithFeedback(btn, () => runTransaction(db, async tx => {
+    const refs = new Map(); arts.forEach(a => { const r = audDoc(id, a.id); if(!refs.has(r.id)) refs.set(r.id, [r, []]); refs.get(r.id)[1].push(a.id); });
+    const lus = []; for(const [r, L] of refs.values()) lus.push([r, L, await tx.get(r)]);
+    deja = [];
+    lus.forEach(([r, L, sn]) => {
+      const d = sn.exists() ? sn.data() : {}, ch = {};
+      L.forEach(x => { const l = d[x] ? JSON.parse(d[x]) : null; if(l && l.s === 'ok') deja.push([x, l]); else ch[x] = neuf[x] ? JSON.stringify(neuf[x]) : ''; });
+      if(Object.keys(ch).length) tx.set(r, ch, { merge: true });
+    });
+  }));
+  if(!ok) return;
+  arts.forEach(a => { if(neuf[a.id]) aud.lignes[a.id] = neuf[a.id]; else delete aud.lignes[a.id]; });
+  deja.forEach(([x, l]) => { aud.lignes[x] = l; });
+  if(deja.length) alert(`${deja.length} article(s) déjà vérifié(s) sur un autre appareil : laissé(s) tel(s) quel(s).`);
+  audSel = null; hide($('aud-liste'));
+  const a = audActuel();
+  if(refaire){ const j = audS.file.indexOf(arts[0].id); if(j >= 0) audS.i = j; audMontre(true); }
+  else if(a && aud.lignes[a.id] && !audS.revoir) audSuivant();
+  else if(audS.revoir && a && aud.lignes[a.id] && aud.lignes[a.id].s !== 'doute') audSuivant();
+  else audMontre(true);
+}
 function audFinBox(){
   hide($('aud-carte')); hide($('aud-liste')); show($('aud-fin')); window.scrollTo(0, 0);
   const arts = audS.file.map(id => materiaux.find(a => a.id === id)).filter(Boolean), b = audBilan(aud.lignes, arts);
   const L = audBoxes(), suite = audS.box ? [...L.slice(L.indexOf(audS.box) + 1), ...L.slice(0, L.indexOf(audS.box))].find(k => audArticles(k).some(a => !aud.lignes[a.id])) : null;
   const revoir = arts.filter(a => aud.lignes[a.id] && aud.lignes[a.id].s === 'doute').map(a => a.id);
   $('aud-fin').innerHTML = `<h1 style="font-size:22px;margin:0 0 8px;">${audS.box ? escHtml(audBoxNom(audS.box)) + ' : terminée' : 'Reprise terminée'}</h1>
-    <div class="aud-chiffres"><span><b>${b.ok}</b> vérifiés</span><span><b>${b.corriges}</b> corrigés</span><span><b>${b.passe}</b> passé${b.passe > 1 ? 's' : ''}</span><span><b>${b.doute}</b> pas sûrs</span></div>
+    <div class="aud-chiffres"><span><b>${b.ok}</b> vérifiés</span><span><b>${b.corriges}</b> corrigés</span><span><b>${b.passe}</b> stock OK</span><span><b>${b.doute}</b> pas sûrs</span></div>
     ${suite ? `<button type="button" class="btn btn-primary" data-fin="box" data-k="${escHtml(suite)}" style="width:100%;margin-top:16px;">Box suivante : ${escHtml(audBoxNom(suite))}</button>` : ''}
     ${revoir.length ? `<button type="button" class="btn" data-fin="revoir" style="width:100%;margin-top:10px;">Reprendre les pas sûrs (${revoir.length})</button>` : ''}
     <button type="button" class="btn" data-fin="retour" style="width:100%;margin-top:10px;">Retour à l'audit</button>`;
@@ -15687,16 +15762,16 @@ function audTotaux(){
 const audSigne = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmtNum(Math.abs(n), 2);
 function audRapportMontre(){
   const m = aud.liste[audR.id], T = audTotaux();
-  const F = [['tout', 'Tout', audTri().length], ['ecart', 'Corrigés', T.corriges], ['passe', 'Passés, stock gardé', T.passe], ['doute', 'Pas sûrs', T.doute], ['reste', 'Non vérifiés', audR.restants.length]];
+  const F = [['tout', 'Tout', audTri().length], ['ecart', 'Corrigés', T.corriges], ['passe', 'Stock OK, gardés', T.passe], ['doute', 'Pas sûrs', T.doute], ['reste', 'Non vérifiés', audR.restants.length]];
   const lignes = audR.filtre === 'reste' ? [] : audTri().filter(l => audR.filtre === 'tout' || (audR.filtre === 'ecart' ? audEcart(l) !== 0 : l.s === audR.filtre));
   $('audit-rapport-body').innerHTML = `
     <div class="hint" style="margin-top:0;">${m.statut === 'termine' ? `Du ${escHtml(fmtDateHeure(m.debut))} au ${escHtml(fmtDateHeure(m.fin))}` : `En cours depuis le ${escHtml(fmtDateHeure(m.debut))}`}</div>
-    <div class="aud-resume"><div class="aud-chiffres"><span><b>${T.ok}</b> vérifiés</span><span><b>${T.corriges}</b> corrigés</span><span><b>${T.passe}</b> passé${T.passe > 1 ? 's' : ''}</span><span><b>${T.doute}</b> pas sûrs</span><span><b>${audR.restants.length}</b> non vérifiés</span></div>
+    <div class="aud-resume"><div class="aud-chiffres"><span><b>${T.ok}</b> vérifiés</span><span><b>${T.corriges}</b> corrigés</span><span><b>${T.passe}</b> stock OK</span><span><b>${T.doute}</b> pas sûrs</span><span><b>${audR.restants.length}</b> non vérifiés</span></div>
       <div class="hint">Pièces en plus : <b>+${fmtNum(T.plus, 0)}</b> · en moins : <b>${audSigne(T.moins)}</b> · valeur d'achat de l'écart : <b>${T.valeur < 0 ? '−' : T.valeur > 0 ? '+' : ''}${fmtEuro(Math.abs(T.valeur))}</b></div></div>
     <button type="button" class="btn btn-primary" data-rap="export" style="width:100%;margin:12px 0;">Exporter le tableau (.xlsx)</button>
     <div class="rsv-chips">${F.map(([k, t, n]) => `<button type="button" class="filter-chip${audR.filtre === k ? ' active' : ''}" data-rap-f="${k}">${t} (${n})</button>`).join('')}</div>
     ${audR.filtre === 'reste' ? audR.restants.map(x => `<div class="aud-r"><div><b>${escHtml(x[0])}</b> ${escHtml(x[1])}</div><div class="hint" style="margin:0;">${escHtml(x[2])} · stock appli ${fmtNum(x[3], 2)}</div></div>`).join('') || '<div class="hint">Tout a été vérifié.</div>'
-      : lignes.map(l => { const e = audEcart(l); return `<div class="aud-r"><div><b>${escHtml(l.code)}</b> ${escHtml(l.nom)}<span class="aud-r-e">${l.s === 'ok' ? (e ? audSigne(e) : '=') : l.s === 'passe' ? 'Gardé' : AUD_ST[l.s]}</span></div>
+      : lignes.map(l => { const e = audEcart(l); return `<div class="aud-r"><div><b>${escHtml(l.code)}</b> ${escHtml(l.nom)}<span class="aud-r-e">${l.s === 'ok' ? (e ? audSigne(e) : '=') : l.s === 'passe' ? 'OK' : AUD_ST[l.s]}</span></div>
         <div class="hint" style="margin:0;">${escHtml(l.box)} · ${l.s === 'ok' ? `${fmtNum(audAvant(l), 2)} → ${fmtNum(l.ap, 2)}${l.u ? ' mm' : ''} · ${l.m === 'pesee' ? `pesée${l.prec >= 1 ? ` (± ${l.prec})` : ''}` : 'comptage'}` : `stock laissé à ${fmtNum(l.av, 2)}${l.est !== null ? ` · estimé ${fmtNum(l.est, 2)}` : ''}`} · ${escHtml(fmtDateHeure(l.t))}${l.note ? `<br>${escHtml(l.note)}` : ''}</div></div>`; }).join('') || '<div class="hint">Rien ici.</div>'}`;
 }
 $('audit-rapport-body').addEventListener('click', e => {
@@ -15706,9 +15781,9 @@ $('audit-rapport-body').addEventListener('click', e => {
 function audClasseur(){
   const m = aud.liste[audR.id], T = audTotaux(), L = audTri(), wb = XLSX.utils.book_new();
   const feuille = (nom, lignes, larg) => { const ws = XLSX.utils.aoa_to_sheet(lignes); ws['!cols'] = larg.map(w => ({ wch: w })); XLSX.utils.book_append_sheet(wb, ws, nom); };
-  feuille('Résumé', [["Audit de l'inventaire Faberhaus Elements"], ['Début', fmtDateHeure(m.debut)], ['Fin', m.fin ? fmtDateHeure(m.fin) : 'en cours'], ['Vérifiés', T.ok], ['dont corrigés', T.corriges], ['Passés (ancien stock gardé)', T.passe], ['Pas sûrs', T.doute], ['Non vérifiés', audR.restants.length], ['Pièces en plus', T.plus], ['Pièces en moins', T.moins], ["Valeur d'achat de l'écart (€)", Math.round(T.valeur * 100) / 100]], [32, 22]);
+  feuille('Résumé', [["Audit de l'inventaire Faberhaus Elements"], ['Début', fmtDateHeure(m.debut)], ['Fin', m.fin ? fmtDateHeure(m.fin) : 'en cours'], ['Vérifiés', T.ok], ['dont corrigés', T.corriges], ['Stock OK (ancien stock gardé)', T.passe], ['Pas sûrs', T.doute], ['Non vérifiés', audR.restants.length], ['Pièces en plus', T.plus], ['Pièces en moins', T.moins], ["Valeur d'achat de l'écart (€)", Math.round(T.valeur * 100) / 100]], [32, 22]);
   const D = [['Storage box', 'Code produit', 'Nom', 'Statut', 'Ancien stock', 'Nouveau stock', 'Écart', 'Unité', "Valeur d'achat de l'écart (€)", 'Estimation (non appliquée)', 'Méthode', 'Poids total (g)', 'Boîte vide (g)', "Poids d'un élément (g)", 'Calcul exact', 'Précision ±', 'Note', 'Date', 'Nombre de passages']];
-  L.forEach(l => { const e = audEcart(l), ok = l.s === 'ok'; D.push([l.box, l.code, l.nom, AUD_ST[l.s], ok ? audAvant(l) : l.av, ok ? l.ap : l.s === 'passe' ? l.av : '', e, l.u || 'pièce', Math.round(e * (l.pu || 0) * 100) / 100, l.est ?? '', l.m === 'pesee' ? 'Pesée' : l.m === 'compte' ? 'Comptage' : '', l.tot ?? '', l.cont ?? '', l.uni ?? '', l.brut ?? '', l.prec ?? '', l.note || '', fmtDateHeure(l.t), (l.prev || []).length + 1]); });
+  L.forEach(l => { const e = audEcart(l), ok = l.s === 'ok'; D.push([l.box, l.code, l.nom, AUD_ST[l.s], ok ? audAvant(l) : l.av, ok ? l.ap : l.s === 'passe' ? l.av : '', e, l.u || 'pièce', Math.round(e * (l.pu || 0) * 100) / 100, l.est ?? '', l.m === 'pesee' ? 'Pesée' : l.m === 'compte' ? 'Comptage' : l.lot ? 'Coché en lot' : '', l.tot ?? '', l.cont ?? '', l.uni ?? '', l.brut ?? '', l.prec ?? '', l.note || '', fmtDateHeure(l.t), (l.prev || []).length + 1]); });
   feuille('Détail', D, [16, 13, 34, 11, 11, 13, 9, 8, 14, 14, 11, 12, 12, 14, 11, 10, 30, 19, 10]);
   feuille('À revoir', [['Storage box', 'Code produit', 'Nom', 'Raison', 'Stock appli', 'Estimation', 'Note'], ...L.filter(l => l.s === 'doute').map(l => [l.box, l.code, l.nom, AUD_ST[l.s], l.av, l.est ?? '', l.note || '']), ...audR.restants.map(x => [x[2], x[0], x[1], 'Non vérifié', x[3], '', ''])], [16, 13, 34, 13, 11, 11, 30]);
   return wb;
