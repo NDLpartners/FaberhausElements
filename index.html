@@ -4466,7 +4466,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#23408F;box-sh
 
   </main>
 
-  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v2026.11.3 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
+  <div class="app-footer" id="app-footer">© <strong>Faberhaus</strong> Elements · v2026.11.4 · <a href="#" id="changelog-link-global" class="changelog-link">Historique des versions</a></div>
 
   <button type="button" class="scroll-top-btn" id="scroll-top-btn" title="Remonter en haut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -10158,7 +10158,7 @@ function preOuvre(){
   if(preCadre) return;
   const el = document.createElement('div'); el.className = 'pre-cadre';
   el.innerHTML = '<div class="pre-attente">Le pré se prépare…<br><button type="button" class="btn">Fermer</button></div>';
-  const f = document.createElement('iframe'); f.src = 'pre.html?v=2026.11.3'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
+  const f = document.createElement('iframe'); f.src = 'pre.html?v=2026.11.4'; f.title = 'Le Pré de Caramel'; f.allow = 'autoplay'; f.style.visibility = 'hidden';
   el.appendChild(f); document.body.appendChild(el); document.body.style.overflow = 'hidden';
   el.querySelector('button').addEventListener('click', preFerme);
   el.addEventListener('touchstart', e => { if(e.target === el) e.preventDefault(); }, { passive: false });
@@ -12888,6 +12888,7 @@ $('promo-delete-btn').addEventListener('click', async ()=>{
    HISTORIQUE DES VERSIONS
    ================================================================== */
 const CHANGELOG = [
+  { v:'2026.11.4', items:["Le Pré de Caramel : Caramel grandit maintenant au fil des journées bien remplies, et une grande aventure commence. Beaucoup de surprises sont à découvrir en jouant."] },
   { v:'2026.11.3', items:["Le Pré de Caramel devient un jeu, sans lien avec le stock ni la réserve Vinted : un geste de soin par lieu, cueillette et album, décorations du ranch. Il se lance depuis Plus d'options.","Réserve Vinted : la carte de Nouvel encodage ouvre l'écran Réserve Vinted."] },
   { v:'2026.11.2', items:["Inventaire général : un seul bouton menu regroupe Ajouter un produit, Réserve Vinted (logo Vinted à la place de la balance) et Audit de l'inventaire."] },
   { v:'2026.11.1', items:["Audit de l'inventaire : dans la liste d'une box, « Cocher plusieurs stocks OK » garde d'un coup le stock des articles cochés, qui ne sont plus proposés. « Remettre à vérifier » annule.","Nouvelle numérotation des versions : année, mois, puis numéro de la mise à jour dans le mois. Elle prend la suite de la v35.74."] },
